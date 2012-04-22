@@ -9,8 +9,6 @@ import java.util.Scanner;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.geo.Box;
@@ -18,8 +16,7 @@ import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import com.md.dm.vi.vast.data.Meta;
-import com.md.dm.vi.vast.data.SpringMongoConfig;
+import com.md.dm.vi.vast.model.Meta;
 import com.mongodb.Mongo;
 
 /**
@@ -52,8 +49,6 @@ public class VastApp {
 	}
 
 	private void populateMeta() throws Exception {
-		ApplicationContext ctx = new AnnotationConfigApplicationContext(
-				SpringMongoConfig.class);
 
 		StringBuilder text = new StringBuilder();
 		String NL = System.getProperty("line.separator");
@@ -62,9 +57,6 @@ public class VastApp {
 						"/Users/diego/Documents/Maestria/VI/vast2012/metaDB-csv-3-7/meta-3-7.csv"),
 				"UTF-8");
 
-		MongoOperations mongoOperation = (MongoOperations) ctx
-				.getBean("mongoTemplate");
-
 		try {
 			System.out.println(scanner.nextLine());
 			while (scanner.hasNextLine()) {
@@ -72,8 +64,6 @@ public class VastApp {
 				Meta meta = Meta.build(scanner.nextLine());
 
 				System.out.println(meta);
-				// save
-				mongoOperation.save(meta);
 			}
 		} finally {
 			scanner.close();
