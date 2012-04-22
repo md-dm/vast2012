@@ -48,7 +48,7 @@ public class SpringMongoTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
-		mongoOps.dropCollection("meta");
+		//mongoOps.dropCollection("meta");
 	}
 
 	@Test

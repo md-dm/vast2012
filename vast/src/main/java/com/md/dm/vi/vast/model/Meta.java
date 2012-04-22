@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author diego
  * 
  */
-@Document(collection = "meta")
+@Document
 public class Meta {
 
 	@Id
