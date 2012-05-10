@@ -75,5 +75,41 @@ public class SpringMongoTest {
 				.within(box)), Meta.class);
 		//Assert.assertFalse(metas.isEmpty());
 	}
+	
+	/**
+	 * db.meta.count({bussinesUnit:'headquarters', machineClass:'server');
+	 * @throws Exception
+	 */
+	@Test
+	public void testCountBaseUnitAndMachineClass() throws Exception {
+		
+	}
+
+	/**
+	 * db.meta.count(bussinesUnit:'headquarters');
+	 * @throws Exception
+	 */
+	@Test
+	public void testCountBaseUnit() throws Exception {
+		
+	}
+
+	/**
+	 * db.meta.distinct('bussinesUnit');
+	 * @throws Exception
+	 */
+	@Test
+	public void testDistinctBaseUnit() throws Exception {
+		
+	}
+
+	/**
+	 * db.meta.distinct('machineClass');
+	 * @throws Exception
+	 */
+	@Test
+	public void testDistinctMachineClass() throws Exception {
+		
+	}
 
 }
