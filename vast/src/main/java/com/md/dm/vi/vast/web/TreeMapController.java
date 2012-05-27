@@ -28,6 +28,11 @@ public class TreeMapController {
 	@Inject
 	private MetaRepository metaRepository;
 
+	
+	// db.meta.group({key:{machineClass: true}, initial:{Total:0}, reduce: function(items, prev){prev.Total += 1}});
+	// db.meta.group({key:{machineFunction: true}, initial:{Total:0}, reduce: function(items, prev){prev.Total += 1}});
+	// 
+	
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json", value = "data1")
 	@ResponseBody
 	public TreeMapVO data1() {
