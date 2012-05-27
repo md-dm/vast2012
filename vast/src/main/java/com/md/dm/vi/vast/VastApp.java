@@ -12,8 +12,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.index.GeospatialIndex;
+import org.springframework.data.mongodb.core.index.Index;
+import org.springframework.data.mongodb.core.query.Order;
 
 import com.md.dm.vi.vast.model.Meta;
+import com.mongodb.DBCollection;
 
 /**
  * @author diego
@@ -67,6 +71,19 @@ public class VastApp {
 			mongoOperations.dropCollection(Meta.class);
 			mongoOperations.createCollection(Meta.class);
 		}
+		mongoOperations.indexOps(Meta.class).ensureIndex(
+				new Index().on("ipAddr", Order.ASCENDING));
+		mongoOperations.indexOps(Meta.class).ensureIndex(
+				new Index().on("machineClass", Order.ASCENDING));
+		mongoOperations.indexOps(Meta.class).ensureIndex(
+				new Index().on("machineFunction", Order.ASCENDING));
+		mongoOperations.indexOps(Meta.class).ensureIndex(
+				new Index().on("bussinesUnit", Order.ASCENDING));
+		mongoOperations.indexOps(Meta.class).ensureIndex(
+				new Index().on("facility", Order.ASCENDING));
+		mongoOperations.indexOps(Meta.class).ensureIndex(
+				new GeospatialIndex("location"));
+
 	}
 
 	private void populateMeta() throws Exception {
