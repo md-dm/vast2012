@@ -31,7 +31,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public Mongo mongo() throws UnknownHostException {
-		return new Mongo("localhost");
+		return new Mongo("localhost:27022");
 	}
 
 	@Bean

@@ -12,10 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.CollectionCallback;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.mapreduce.GroupBy;
+import org.springframework.data.mongodb.core.mapreduce.GroupByResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.md.dm.vi.vast.d3.valueobject.GroupVO;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoException;
 
@@ -94,5 +97,9 @@ public class MetaRepository {
 			mongoTemplate.createCollection(Meta.class);
 		}
 
+	}
+	
+	public GroupByResults<GroupVO> group(final String collection){
+		return mongoTemplate.group(collection, GroupBy.key("bussinesUnit").initialDocument("{ count: 0 }").reduceFunction("function(doc, prev) { prev.count += 1 }"), GroupVO.class);
 	}
 }

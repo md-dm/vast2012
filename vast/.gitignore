@@ -1,1 +1,5 @@
 /.settings
+vast/.classpath
+/.project
+vast/db/
+vast/target/
