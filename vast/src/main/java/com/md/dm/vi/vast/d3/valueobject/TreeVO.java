@@ -23,6 +23,18 @@ public class TreeVO extends NodeVO{
 		super();
 		this.children = children;
 	}
+	
+	public NodeVO getChild(String name) {
+		
+		for (NodeVO nodeVO : children) {
+			if(nodeVO.getName().equals(name)){
+				return nodeVO;
+			}
+			
+		}
+		return null;
+		
+	}
 
 //	@Override
 //	public boolean isLeaf() {

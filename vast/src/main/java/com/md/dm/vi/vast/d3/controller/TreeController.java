@@ -39,15 +39,19 @@ public class TreeController {
 		
 		ArrayList<NodeVO> childs = new ArrayList<NodeVO>();
 		TreeVO root = new TreeVO("headquarter", childs);
-		String current = "";
-		LeafVO currentNode = null;
 		
 		while(iterator.hasNext()){
 			GroupVO next = iterator.next();
-			if(next != null && !next.getBussinesUnit().equals(current)){
-				current = next.getBussinesUnit();
-				currentNode = new LeafVO(current, next.getCount());
-				root.getChildren().add(currentNode);
+			TreeVO child = (TreeVO)root.getChild(next.getBussinesUnit());
+			if (child == null) {
+				child = new TreeVO(next.getBussinesUnit(), new ArrayList<NodeVO>());
+				root.getChildren().add(child);
+			}
+			
+			NodeVO child2 = child.getChild(next.getMachineClass());
+			if(child2 == null) {
+				child2 = new LeafVO(next.getMachineClass(), next.getCount());
+				child.getChildren().add(child2);
 			}
 		}
 		

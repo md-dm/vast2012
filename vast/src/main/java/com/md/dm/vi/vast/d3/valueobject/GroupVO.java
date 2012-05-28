@@ -3,13 +3,13 @@ package com.md.dm.vi.vast.d3.valueobject;
 public class GroupVO {
 	
 	private String bussinesUnit;
-	private String facility;
+	private String machineClass;
 	private int count;
 	
-	public GroupVO(String bussinesUnit, String facility, int count) {
+	public GroupVO(String bussinesUnit, String machineClass, int count) {
 		super();
 		this.bussinesUnit = bussinesUnit;
-		this.facility = facility;
+		this.machineClass = machineClass;
 		this.count = count;
 	}
 
@@ -21,8 +21,8 @@ public class GroupVO {
 		return count;
 	}
 
-	public String getFacility() {
-		return facility;
+	public String getMachineClass() {
+		return machineClass;
 	}
 	
 	
