@@ -100,6 +100,6 @@ public class MetaRepository {
 	}
 	
 	public GroupByResults<GroupVO> group(final String collection){
-		return mongoTemplate.group(collection, GroupBy.key("bussinesUnit", "machineClass").initialDocument("{ count: 0 }").reduceFunction("function(doc, prev) { prev.count += 1 }"), GroupVO.class);
+		return mongoTemplate.group(collection, GroupBy.key("bussinesUnit", "machineClass", "machineFunction").initialDocument("{ count: 0 }").reduceFunction("function(doc, prev) { prev.count += 1 }"), GroupVO.class);
 	}
 }

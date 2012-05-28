@@ -48,10 +48,16 @@ public class TreeController {
 				root.getChildren().add(child);
 			}
 			
-			NodeVO child2 = child.getChild(next.getMachineClass());
+			TreeVO child2 = (TreeVO)child.getChild(next.getMachineClass());
 			if(child2 == null) {
-				child2 = new LeafVO(next.getMachineClass(), next.getCount());
+				child2 = new TreeVO(next.getMachineClass(), new ArrayList<NodeVO>());
 				child.getChildren().add(child2);
+			}
+			
+			NodeVO child3 = child.getChild(next.getMachineFunction());
+			if(child3 == null) {
+				child3 = new LeafVO(next.getMachineFunction(), next.getCount());
+				child2.getChildren().add(child3);
 			}
 		}
 		
