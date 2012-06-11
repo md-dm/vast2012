@@ -4,18 +4,57 @@
 
 package com.md.dm.infovis.vast.map;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+
 import javax.swing.GroupLayout;
-import javax.swing.border.*;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JToggleButton;
+import javax.swing.JTree;
+import javax.swing.LayoutStyle;
+import javax.swing.border.TitledBorder;
+
+import org.jdesktop.swingx.JXMapKit;
+import org.jdesktop.swingx.mapviewer.DefaultTileFactory;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 /**
  * @author Diego Correa
  */
 public class MapView extends JPanel {
 	
+	private JXMapKit jXMapKit;
+	
 	public MapView() {
 		initComponents();
+		afterInitComponents();
+	}
+
+	private void afterInitComponents() {
+		
+		jXMapKit = new JXMapKit();
+		jXMapKit.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
+		jXMapKit.setAddressLocationShown(false);
+		jXMapKit.setDataProviderCreditShown(false);
+		//jXMapKit.setCenterPosition(new GeoPosition(0, 0));
+		jXMapKit.setMiniMapVisible(true);
+		jXMapKit.setZoomSliderVisible(true);
+		jXMapKit.setZoomButtonsVisible(true);
+		jXMapKit.setAddressLocationShown(true);
+		jXMapKit.setCenterPosition(new GeoPosition( 45, -90));
+		//jXMapKit.setAddressLocation(new GeoPosition(1, 1));
+
+		jXMapKit.setZoom(8);
+		((DefaultTileFactory) jXMapKit.getMainMap().getTileFactory()).setThreadPoolSize(8);
+
+		panel1.add(jXMapKit, BorderLayout.CENTER);
+		
 	}
 
 	private void initComponents() {
