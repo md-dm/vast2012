@@ -1,0 +1,514 @@
+		<north>77.68970041647046</north>
+		<south>-20.79269625176585</south>
+		<east>-45.65515496228814</east>
+		<west>-161.2380960077794</west>
+
+
+> db.machine.findOne();
+{
+	"_id" : ObjectId("4fcbf7b21a56c2b4ff20974c"),
+	"_class" : "com.md.dm.vi.vast.model.Machine",
+	"ipAddr" : "172.4.83.2",
+	"firstOctect" : 172,
+	"secondOctect" : 4,
+	"thirdOctect" : 83,
+	"fourthOctect" : 2,
+	"machineClass" : "server",
+	"machineFunction" : "multiple",
+	"bussinesUnit" : "headquarters",
+	"facility" : "datacenter-5",
+	"location" : [
+		66.6357,
+		-100.557335
+	],
+	"statusList" : [ ]
+}
+
+		
+
+db.machine.ensureIndex({position: "2d"});
+db.machine.find({location : [66.6357, -100.557335]}).count();
+
+box = [[ -20.79, -161.23], [77.68, -45.65]]; 
+db.machine.find( { location: { $within : { $box : box } } } ).count();
+
+db.machine.find({"statusList.policyStatus" : 2}).count();
+
+
+> db.machine.find({statusList: {$ne:[]}}).count();
+809216
+> db.machine.find({}).count();
+888977
+> 
+
+Hay 79761 maquinas sin ningun reporte
+
+Ojo.. hay que poner ademas el filtro de cuales son las que no tienen notificaciones!
+
+
+
+
+> db.machine.findOne({statusList: {$ne:[]}});
+{
+	"_class" : "com.md.dm.vi.vast.model.Machine",
+	"_id" : ObjectId("4fcbf7b21a56c2b4ff209912"),
+	"bussinesUnit" : "headquarters",
+	"facility" : "headquarters",
+	"firstOctect" : 172,
+	"fourthOctect" : 84,
+	"ipAddr" : "172.1.3.84",
+	"location" : [
+		0.8173708,
+		-70.259796
+	],
+	"machineClass" : "workstation",
+	"machineFunction" : "loan",
+	"secondOctect" : 1,
+	"statusList" : [
+		{
+			"tkey" : NumberLong(259872),
+			"healthTime" : ISODate("2012-02-02T17:00:00Z"),
+			"numConnections" : 16,
+			"policyStatus" : 1,
+			"activityFlag" : 1
+		}
+	],
+	"thirdOctect" : 3
+}
+
+
+> db.machine.distinct("bussinesUnit")
+[
+	"headquarters",
+	"region-1",
+	"region-10",
+	"region-11",
+	"region-12",
+	"region-13",
+	"region-14",
+	"region-15",
+	"region-16",
+	"region-17",
+	"region-18",
+	"region-19",
+	"region-2",
+	"region-20",
+	"region-21",
+	"region-22",
+	"region-23",
+	"region-24",
+	"region-25",
+	"region-26",
+	"region-27",
+	"region-28",
+	"region-29",
+	"region-3",
+	"region-30",
+	"region-31",
+	"region-32",
+	"region-33",
+	"region-34",
+	"region-35",
+	"region-36",
+	"region-37",
+	"region-38",
+	"region-39",
+	"region-4",
+	"region-40",
+	"region-41",
+	"region-42",
+	"region-43",
+	"region-44",
+	"region-45",
+	"region-46",
+	"region-47",
+	"region-48",
+	"region-49",
+	"region-5",
+	"region-50",
+	"region-6",
+	"region-7",
+	"region-8",
+	"region-9"
+]
+
+
+> db.machine.distinct("facility")
+[
+	"branch1",
+	"branch10",
+	"branch100",
+	"branch101",
+	"branch102",
+	"branch103",
+	"branch104",
+	"branch105",
+	"branch106",
+	"branch107",
+	"branch108",
+	"branch109",
+	"branch11",
+	"branch110",
+	"branch111",
+	"branch112",
+	"branch113",
+	"branch114",
+	"branch115",
+	"branch116",
+	"branch117",
+	"branch118",
+	"branch119",
+	"branch12",
+	"branch120",
+	"branch121",
+	"branch122",
+	"branch123",
+	"branch124",
+	"branch125",
+	"branch126",
+	"branch127",
+	"branch128",
+	"branch129",
+	"branch13",
+	"branch130",
+	"branch131",
+	"branch132",
+	"branch133",
+	"branch134",
+	"branch135",
+	"branch136",
+	"branch137",
+	"branch138",
+	"branch139",
+	"branch14",
+	"branch140",
+	"branch141",
+	"branch142",
+	"branch143",
+	"branch144",
+	"branch145",
+	"branch146",
+	"branch147",
+	"branch148",
+	"branch149",
+	"branch15",
+	"branch150",
+	"branch151",
+	"branch152",
+	"branch153",
+	"branch154",
+	"branch155",
+	"branch156",
+	"branch157",
+	"branch158",
+	"branch159",
+	"branch16",
+	"branch160",
+	"branch161",
+	"branch162",
+	"branch163",
+	"branch164",
+	"branch165",
+	"branch166",
+	"branch167",
+	"branch168",
+	"branch169",
+	"branch17",
+	"branch170",
+	"branch171",
+	"branch172",
+	"branch173",
+	"branch174",
+	"branch175",
+	"branch176",
+	"branch177",
+	"branch178",
+	"branch179",
+	"branch18",
+	"branch180",
+	"branch181",
+	"branch182",
+	"branch183",
+	"branch184",
+	"branch185",
+	"branch186",
+	"branch187",
+	"branch188",
+	"branch189",
+	"branch19",
+	"branch190",
+	"branch191",
+	"branch192",
+	"branch193",
+	"branch194",
+	"branch195",
+	"branch196",
+	"branch197",
+	"branch198",
+	"branch199",
+	"branch2",
+	"branch20",
+	"branch200",
+	"branch21",
+	"branch22",
+	"branch23",
+	"branch24",
+	"branch25",
+	"branch26",
+	"branch27",
+	"branch28",
+	"branch29",
+	"branch3",
+	"branch30",
+	"branch31",
+	"branch32",
+	"branch33",
+	"branch34",
+	"branch35",
+	"branch36",
+	"branch37",
+	"branch38",
+	"branch39",
+	"branch4",
+	"branch40",
+	"branch41",
+	"branch42",
+	"branch43",
+	"branch44",
+	"branch45",
+	"branch46",
+	"branch47",
+	"branch48",
+	"branch49",
+	"branch5",
+	"branch50",
+	"branch51",
+	"branch52",
+	"branch53",
+	"branch54",
+	"branch55",
+	"branch56",
+	"branch57",
+	"branch58",
+	"branch59",
+	"branch6",
+	"branch60",
+	"branch61",
+	"branch62",
+	"branch63",
+	"branch64",
+	"branch65",
+	"branch66",
+	"branch67",
+	"branch68",
+	"branch69",
+	"branch7",
+	"branch70",
+	"branch71",
+	"branch72",
+	"branch73",
+	"branch74",
+	"branch75",
+	"branch76",
+	"branch77",
+	"branch78",
+	"branch79",
+	"branch8",
+	"branch80",
+	"branch81",
+	"branch82",
+	"branch83",
+	"branch84",
+	"branch85",
+	"branch86",
+	"branch87",
+	"branch88",
+	"branch89",
+	"branch9",
+	"branch90",
+	"branch91",
+	"branch92",
+	"branch93",
+	"branch94",
+	"branch95",
+	"branch96",
+	"branch97",
+	"branch98",
+	"branch99",
+	"datacenter-1",
+	"datacenter-2",
+	"datacenter-3",
+	"datacenter-4",
+	"datacenter-5",
+	"headquarters"
+]
+
+db.machine.distinct("machineClass")
+[ "atm", "server", "workstation" ]
+> db.machine.distinct("machineFunction")
+[
+	"",
+	"compute",
+	"email",
+	"file server",
+	"loan",
+	"multiple",
+	"office",
+	"teller",
+	"web"
+]
+
+> db.machine.find({"statusList.policyStatus": 1}).count();
+661767
+> db.machine.find({"statusList.policyStatus": 2}).count();
+144311
+> db.machine.find({"statusList.policyStatus": 3}).count();
+3034
+> db.machine.find({"statusList.policyStatus": 4}).count();
+103
+> db.machine.find({"statusList.policyStatus": 5}).count();
+1
+
+
+> db.machine.find({"statusList.activityFlag": 1}).count();
+789009
+> db.machine.find({"statusList.activityFlag": 2}).count();
+743
+> db.machine.find({"statusList.activityFlag": 3}).count();
+11616
+> db.machine.find({"statusList.activityFlag": 4}).count();
+2903
+> db.machine.find({"statusList.activityFlag": 5}).count();
+4945
+
+
+
+ db.machine.find({"statusList.policyStatus": 1, "statusList.activityFlag": 1}).count();
+
+
+db.machine.group({ key: { machineClass:true }, cond: { "statusList.activityFlag": 5 }, reduce: function(doc, prev) { prev.count += 1 }, initial: { count: 0 }});
+
+> db.machine.group({ key: { machineClass:true }, cond: { "statusList.activityFlag": 5 }, reduce: function(doc, prev) { prev.count += 1 }, initial: { count: 0 }});
+[
+	{
+		"machineClass" : "server",
+		"count" : 2102
+	},
+	{
+		"machineClass" : "workstation",
+		"count" : 2698
+	},
+	{
+		"machineClass" : "atm",
+		"count" : 145
+	}
+]
+
+db.machine.group({ key: { machineClass:true, machineFunction:true }, cond: { "statusList.activityFlag": 5 }, reduce: function(doc, prev) { prev.count += 1 }, initial: { count: 0 }});
+[
+	{
+		"machineClass" : "server",
+		"machineFunction" : "compute",
+		"count" : 410
+	},
+	{
+		"machineClass" : "workstation",
+		"machineFunction" : "office",
+		"count" : 1508
+	},
+	{
+		"machineClass" : "workstation",
+		"machineFunction" : "loan",
+		"count" : 626
+	},
+	{
+		"machineClass" : "server",
+		"machineFunction" : "file server",
+		"count" : 410
+	},
+	{
+		"machineClass" : "workstation",
+		"machineFunction" : "teller",
+		"count" : 564
+	},
+	{
+		"machineClass" : "server",
+		"machineFunction" : "multiple",
+		"count" : 690
+	},
+	{
+		"machineClass" : "server",
+		"machineFunction" : "email",
+		"count" : 169
+	},
+	{
+		"machineClass" : "server",
+		"machineFunction" : "web",
+		"count" : 423
+	},
+	{
+		"machineClass" : "atm",
+		"machineFunction" : "",
+		"count" : 145
+	}
+]
+
+db.machine.group({ key: { machineClass:true, machineFunction:true }, cond: { "statusList.policyStatus": 4, "statusList.activityFlag": 5 }, reduce: function(doc, prev) { prev.count += 1; prev.ipAddr.push(doc.ipAddr)}, initial: { count: 0, ipAddr:[] }});
+
+
+>  db.machine.find({"statusList.policyStatus": 1, "statusList.activityFlag": 1}).count();
+646127
+> db.machine.find({"statusList.policyStatus": 1, "statusList.activityFlag": 2}).count();
+578
+> db.machine.find({"statusList.policyStatus": 1, "statusList.activityFlag": 3}).count();
+8973
+> db.machine.find({"statusList.policyStatus": 1, "statusList.activityFlag": 4}).count();
+2249
+> db.machine.find({"statusList.policyStatus": 1, "statusList.activityFlag": 5}).count();
+3840
+> db.machine.find({"statusList.policyStatus": 1, "statusList.activityFlag": 1}).count();
+> db.machine.find({"statusList.policyStatus": 2, "statusList.activityFlag": 1}).count();
+139812
+> db.machine.find({"statusList.policyStatus": 2, "statusList.activityFlag": 2}).count();
+159
+> db.machine.find({"statusList.policyStatus": 2, "statusList.activityFlag": 3}).count();
+2599
+> db.machine.find({"statusList.policyStatus": 2, "statusList.activityFlag": 4}).count();
+643
+> db.machine.find({"statusList.policyStatus": 2, "statusList.activityFlag": 5}).count();
+1098
+> db.machine.find({"statusList.policyStatus": 3, "statusList.activityFlag": 1}).count();
+2969
+> db.machine.find({"statusList.policyStatus": 3, "statusList.activityFlag": 2}).count();
+6
+> db.machine.find({"statusList.policyStatus": 3, "statusList.activityFlag": 3}).count();
+43
+> db.machine.find({"statusList.policyStatus": 3, "statusList.activityFlag": 4}).count();
+9
+> db.machine.find({"statusList.policyStatus": 3, "statusList.activityFlag": 5}).count();
+7
+> db.machine.find({"statusList.policyStatus": 4, "statusList.activityFlag": 1}).count();
+100
+> db.machine.find({"statusList.policyStatus": 4, "statusList.activityFlag": 2}).count();
+0
+> db.machine.find({"statusList.policyStatus": 4, "statusList.activityFlag": 3}).count();
+1
+> db.machine.find({"statusList.policyStatus": 4, "statusList.activityFlag": 4}).count();
+2
+> db.machine.find({"statusList.policyStatus": 4, "statusList.activityFlag": 5}).count();
+0
+> db.machine.find({"statusList.policyStatus": 5, "statusList.activityFlag": 1}).count();
+1
+> db.machine.find({"statusList.policyStatus": 5, "statusList.activityFlag": 2}).count();
+0
+
+
+db.machine.group({ key: { machineClass:true, machineFunction:true }, cond: { "statusList.policyStatus": 3, "statusList.activityFlag": 3 }, reduce: function(doc, prev) { prev.count += 1; prev.ipAddr.push(doc.ipAddr)}, initial: { count: 0, ipAddr:[] }});
+
+
+
+db.machine.group({ key: { bussinesUnit:true}, cond: { statusList:[] }, reduce: function(doc, prev) { prev.count += 1 }, initial: { count: 0 }});
+
+db.machine.group({ key: { machineClass:true, bussinesUnit:true}, cond: { statusList:[] }, reduce: function(doc, prev) { prev.count += 1 }, initial: { count: 0 }});
+
+db.machine.group({ key: { bussinesUnit:true, facility:true }, cond: { statusList:[] }, reduce: function(doc, prev) { prev.count += 1 }, initial: { count: 0 }});
