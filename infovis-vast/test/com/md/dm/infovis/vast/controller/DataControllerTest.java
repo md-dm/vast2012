@@ -1,15 +1,20 @@
 package com.md.dm.infovis.vast.controller;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+
+import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+
 public class DataControllerTest {
 
 	private DataController dataController;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		dataController = new DataController();
@@ -20,8 +25,38 @@ public class DataControllerTest {
 	}
 
 	@Test
-	public final void test() {
-		fail("Not yet implemented");
+	public final void testGetCollection() {
+		DBCollection collection = dataController.getCollection("meta");
+		Assert.assertNotNull(collection);
+		Assert.assertEquals("meta", collection.getName());
 	}
 
+	@Test
+	public void testCountCollection() throws Exception {
+		long count = dataController.count("meta");
+		Assert.assertTrue(count >= 0);
+	}
+
+	/**
+	 * db.machine.find({}).count(); 888977 >
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testFindAll() throws Exception {
+		System.out.println(dataController.find().count());
+	}
+
+	/**
+	 * > db.machine.find({statusList: {$ne:[]}}).count(); 
+	 * 809216 >
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testFindAllNonEmpty() throws Exception {
+		BasicDBObject query = new BasicDBObject();
+		query.append("statusList", new BasicDBObject("$ne", new ArrayList()));
+		System.out.println(dataController.find(query).count());
+	}
 }

@@ -226,7 +226,7 @@ public class VastApp {
 		StringBuilder text = new StringBuilder();
 		String NL = System.getProperty("line.separator");
 		Scanner scanner = new Scanner(new FileInputStream(
-				"/Users/diego/Documents/Maestria/VI/vast2012/metaDB-csv-3-7/metaStatus-3-7.csv"),
+				"/Users/diego/Documents/Maestria/VI/vast2012/metaDB-csv-3-7/windowOneSingle.csv"),
 				"UTF-8");
 
 		try {

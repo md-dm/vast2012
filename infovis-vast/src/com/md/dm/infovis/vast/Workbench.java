@@ -16,6 +16,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import com.md.dm.infovis.vast.controller.DataController;
+
 /**
  * @author diego
  * 
@@ -27,7 +29,7 @@ public class Workbench extends JFrame implements ActionListener {
 	private DataController dataController;
 	
 	
-	public Workbench() {
+	public Workbench() throws Exception{
 		// Make the big window be indented 50 pixels from each edge
 		// of the screen.
 		int inset = 50;
@@ -102,7 +104,7 @@ public class Workbench extends JFrame implements ActionListener {
 	 * Create the GUI and show it. For thread safety, this method should be
 	 * invoked from the event-dispatching thread.
 	 */
-	private static void createAndShowGUI() {
+	private static void createAndShowGUI() throws Exception{
 		// Make sure we have nice window decorations.
 		JFrame.setDefaultLookAndFeelDecorated(true);
 
@@ -114,12 +116,16 @@ public class Workbench extends JFrame implements ActionListener {
 		frame.setVisible(true);
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		// Schedule a job for the event-dispatching thread:
 		// creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				createAndShowGUI();
+				try {
+					createAndShowGUI();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
