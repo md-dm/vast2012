@@ -5,8 +5,14 @@ import java.awt.BorderLayout;
 import javax.swing.JDialog;
 
 import org.jdesktop.swingx.JXMapKit;
+import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.DefaultTileFactory;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.jdesktop.swingx.painter.CompoundPainter;
+import org.jdesktop.swingx.painter.Painter;
+
+import com.md.dm.infovis.vast.map.PieChartWaipontPainter;
+import com.md.dm.infovis.vast.map.PolygonPainter;
 
 public class MapKitController {
 
@@ -33,10 +39,20 @@ public class MapKitController {
 		mapKit.setZoom(8);
 		((DefaultTileFactory) mapKit.getMainMap().getTileFactory())
 				.setThreadPoolSize(8);
+
+		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
+				new PieChartWaipontPainter(), new PolygonPainter());
+		compoundPainter.setCacheable(false);
+
+		this.setOverlayPainter(compoundPainter);
 	}
 
 	public void addWaypoints() {
 
+	}
+
+	private void setOverlayPainter(Painter<JXMapViewer> painter) {
+		mapKit.getMainMap().setOverlayPainter(painter);
 	}
 
 	public JXMapKit getMapKit() {
@@ -63,7 +79,7 @@ public class MapKitController {
 
 				dialog.setSize(600, 400);
 				dialog.setLocationRelativeTo(null);
-				
+
 				dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 					public void windowClosing(java.awt.event.WindowEvent e) {
 						System.exit(0);
