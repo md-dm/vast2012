@@ -7,7 +7,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JInternalFrame;
 
-import com.md.dm.infovis.vast.map.MapView;
+import com.md.dm.infovis.view.MainView;
 
 /**
  * @author diego
@@ -29,7 +29,7 @@ public class InternalViewer extends JInternalFrame {
 		// ...Then set the window size or call pack...
 		setSize(600, 600);
 		setLayout(new BorderLayout());
-		add(new MapView(), BorderLayout.CENTER);
+		add(new MainView(), BorderLayout.CENTER);
 
 		// Set the window's location.
 		setLocation(xOffset * openFrameCount, yOffset * openFrameCount);
