@@ -11,6 +11,9 @@ import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.Waypoint;
 import org.jdesktop.swingx.mapviewer.WaypointPainter;
 
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
 /**
  * @author diego
  * 
@@ -22,6 +25,15 @@ public class PieChartWaipontPainter extends WaypointPainter<JXMapViewer> {
 	public PieChartWaipontPainter(Set<Waypoint> waypoints) {
 		super();
 		this.waypoints = waypoints;
+		this.setRenderer(new PieChartWaypointRenderer());
+	}
+
+	public PieChartWaipontPainter(DBCursor cursor) {
+		waypoints = new HashSet<Waypoint>();
+		for (DBObject dbObject : cursor) {
+			System.out.println(dbObject.get("location"));
+			
+		}
 		this.setRenderer(new PieChartWaypointRenderer());
 	}
 

@@ -59,4 +59,14 @@ public class DataControllerTest {
 		query.append("statusList", new BasicDBObject("$ne", new ArrayList()));
 		System.out.println(dataController.find(query).count());
 	}
+
+	@Test
+	public void testFilter() throws Exception {
+		System.out.println(dataController.filter("region-1", "branch1").count());
+	}
+
+	@Test
+	public void testGroup() throws Exception {
+		System.out.println(dataController.group("region-1", "branch1"));
+	}
 }

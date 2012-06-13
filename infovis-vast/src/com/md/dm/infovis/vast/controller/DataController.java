@@ -2,6 +2,7 @@ package com.md.dm.infovis.vast.controller;
 
 import java.util.List;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -30,7 +31,8 @@ public class DataController {
 		this(new Mongo("localhost", 27022), "vast", "machine");
 	}
 
-	public DataController(Mongo mongo, String databaseName, String collectionName) {
+	public DataController(Mongo mongo, String databaseName,
+			String collectionName) {
 		super();
 		this.mongo = mongo;
 		this.db = mongo.getDB(databaseName);
@@ -121,7 +123,8 @@ public class DataController {
 	 * @see com.mongodb.DBCollection#findOne(com.mongodb.DBObject,
 	 *      com.mongodb.DBObject, com.mongodb.ReadPreference)
 	 */
-	public final DBObject findOne(DBObject o, DBObject fields, ReadPreference readPref) {
+	public final DBObject findOne(DBObject o, DBObject fields,
+			ReadPreference readPref) {
 		return collection.findOne(o, fields, readPref);
 	}
 
@@ -188,8 +191,8 @@ public class DataController {
 	 *      com.mongodb.DBObject, com.mongodb.DBObject, java.lang.String,
 	 *      java.lang.String)
 	 */
-	public DBObject group(DBObject key, DBObject cond, DBObject initial, String reduce,
-			String finalize) throws MongoException {
+	public DBObject group(DBObject key, DBObject cond, DBObject initial,
+			String reduce, String finalize) throws MongoException {
 		return collection.group(key, cond, initial, reduce, finalize);
 	}
 
@@ -203,8 +206,8 @@ public class DataController {
 	 * @see com.mongodb.DBCollection#group(com.mongodb.DBObject,
 	 *      com.mongodb.DBObject, com.mongodb.DBObject, java.lang.String)
 	 */
-	public DBObject group(DBObject key, DBObject cond, DBObject initial, String reduce)
-			throws MongoException {
+	public DBObject group(DBObject key, DBObject cond, DBObject initial,
+			String reduce) throws MongoException {
 		return collection.group(key, cond, initial, reduce);
 	}
 
@@ -244,7 +247,8 @@ public class DataController {
 	 * @throws MongoException
 	 * @see com.mongodb.DBCollection#mapReduce(com.mongodb.MapReduceCommand)
 	 */
-	public MapReduceOutput mapReduce(MapReduceCommand command) throws MongoException {
+	public MapReduceOutput mapReduce(MapReduceCommand command)
+			throws MongoException {
 		return collection.mapReduce(command);
 	}
 
@@ -258,8 +262,8 @@ public class DataController {
 	 * @see com.mongodb.DBCollection#mapReduce(java.lang.String,
 	 *      java.lang.String, java.lang.String, com.mongodb.DBObject)
 	 */
-	public MapReduceOutput mapReduce(String map, String reduce, String outputTarget, DBObject query)
-			throws MongoException {
+	public MapReduceOutput mapReduce(String map, String reduce,
+			String outputTarget, DBObject query) throws MongoException {
 		return collection.mapReduce(map, reduce, outputTarget, query);
 	}
 
@@ -275,9 +279,54 @@ public class DataController {
 	 *      java.lang.String, java.lang.String,
 	 *      com.mongodb.MapReduceCommand.OutputType, com.mongodb.DBObject)
 	 */
-	public MapReduceOutput mapReduce(String map, String reduce, String outputTarget,
-			OutputType outputType, DBObject query) throws MongoException {
-		return collection.mapReduce(map, reduce, outputTarget, outputType, query);
+	public MapReduceOutput mapReduce(String map, String reduce,
+			String outputTarget, OutputType outputType, DBObject query)
+			throws MongoException {
+		return collection.mapReduce(map, reduce, outputTarget, outputType,
+				query);
+	}
+
+	/**
+	 * //dataController.filterBy("bussinesUnit:'region-1', facility:'branch1'}")
+	 * 
+	 * @param string
+	 * @param string2
+	 * @return
+	 */
+	public DBCursor filter(String bussinesUnit, String facility) {
+
+		BasicDBObject query = new BasicDBObject();
+		query.append("bussinesUnit", bussinesUnit);
+		query.append("facility", facility);
+
+		return collection.find(query);
+
+	}
+
+	/**
+	 * //dataController.filterBy("bussinesUnit:'region-1', facility:'branch1'}")
+	 * 
+	 * @param string
+	 * @param string2
+	 * @return
+	 */
+	public DBObject group(String bussinesUnit, String facility) {
+
+		BasicDBObject key = new BasicDBObject();
+		key.append("bussinesUnit", true);
+		key.append("facility", true);
+
+		BasicDBObject cond = new BasicDBObject();
+		cond.append("bussinesUnit", bussinesUnit);
+		cond.append("facility", facility);
+
+		BasicDBObject initial = new BasicDBObject();
+		initial.append("count", 0);
+
+		DBObject dbObject = collection.group(key, cond, initial,
+				"function(doc, prev) { prev.count += 1 }");
+		
+		return dbObject;
 	}
 
 }

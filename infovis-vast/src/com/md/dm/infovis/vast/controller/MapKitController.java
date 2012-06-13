@@ -13,18 +13,25 @@ import org.jdesktop.swingx.painter.Painter;
 
 import com.md.dm.infovis.vast.map.PieChartWaipontPainter;
 import com.md.dm.infovis.vast.map.PolygonPainter;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 
 public class MapKitController {
 
 	private JXMapKit mapKit;
 
-	public MapKitController(JXMapKit mapKit) {
+	// TODO: Remove this and inject
+	private DataController dataController;
+
+	public MapKitController(JXMapKit mapKit) throws Exception {
 		super();
 		this.mapKit = mapKit;
+		dataController = new DataController();
 	}
 
-	public MapKitController() {
+	public MapKitController() throws Exception {
 		mapKit = new JXMapKit();
+		dataController = new DataController();
 		mapKit.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
 		mapKit.setAddressLocationShown(false);
 		mapKit.setDataProviderCreditShown(false);
@@ -41,9 +48,12 @@ public class MapKitController {
 				.setThreadPoolSize(8);
 
 		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
-				new PieChartWaipontPainter(), new PolygonPainter());
+				new PieChartWaipontPainter(dataController.filter("region-1", "branch1")), new PolygonPainter());
+		
 		compoundPainter.setCacheable(false);
 
+		
+		
 		this.setOverlayPainter(compoundPainter);
 	}
 
@@ -74,8 +84,13 @@ public class MapKitController {
 			public void run() {
 				JDialog dialog = new JDialog(new javax.swing.JFrame(), true);
 				dialog.getContentPane().setLayout(new BorderLayout());
-				dialog.add(new MapKitController().getMapKit(),
-						BorderLayout.CENTER);
+				try {
+					dialog.add(new MapKitController().getMapKit(),
+							BorderLayout.CENTER);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
 				dialog.setSize(600, 400);
 				dialog.setLocationRelativeTo(null);
