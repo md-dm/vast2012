@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.JTree;
 import javax.swing.border.TitledBorder;
@@ -46,11 +47,15 @@ public class MainView extends JPanel {
 		add(southPanel, BorderLayout.SOUTH);
 		add(centerPanel, BorderLayout.CENTER);
 		
-		centerPanel.add(initMap(), BorderLayout.CENTER);
+		//centerPanel.add(initMap(), BorderLayout.CENTER);
 		westPanel.add(initFilterPanel(), BorderLayout.CENTER);
-		eastPanel.add(initRegionPanel(), BorderLayout.CENTER);
+		//eastPanel.add(initRegionPanel(), BorderLayout.CENTER);
 		southPanel.add(initNavigationPanel(), BorderLayout.CENTER);
 		
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, initMap(), initRegionPanel());
+		splitPane.setOneTouchExpandable(true);
+		splitPane.setResizeWeight(1.0);
+		centerPanel.add(splitPane, BorderLayout.CENTER);
 	}
 	
 	private JPanel initMap(){
