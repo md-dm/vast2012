@@ -7,6 +7,11 @@ import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JToggleButton;
+import javax.swing.JTree;
 import javax.swing.border.TitledBorder;
 
 import org.jdesktop.swingx.JXMapKit;
@@ -43,6 +48,8 @@ public class MainView extends JPanel {
 		
 		centerPanel.add(initMap(), BorderLayout.CENTER);
 		westPanel.add(initFilterPanel(), BorderLayout.CENTER);
+		eastPanel.add(initRegionPanel(), BorderLayout.CENTER);
+		southPanel.add(initNavigationPanel(), BorderLayout.CENTER);
 		
 	}
 	
@@ -113,8 +120,38 @@ public class MainView extends JPanel {
 		numConnectionsPanel.add(numConnectionsComboBox);
 		
 		filterPanel.add(numConnectionsPanel);
-
+		
 		return filterPanel;
 	}
 
+	private JPanel initRegionPanel(){
+		
+		JPanel regionPanel = new JPanel(new BorderLayout());
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(new JTree());
+		
+		regionPanel.add(scrollPane, BorderLayout.CENTER);
+		return regionPanel;
+	
+	}
+	
+	private JPanel initNavigationPanel(){
+		JPanel navigationPanel = new JPanel(new BorderLayout());
+		
+		JProgressBar progressBar = new JProgressBar();
+		JSlider slider = new JSlider();
+		JToggleButton toggleButton = new JToggleButton("Play");
+
+		JPanel controlPanel = new JPanel(new BorderLayout());
+		controlPanel.add(toggleButton, BorderLayout.WEST);
+		controlPanel.add(slider, BorderLayout.CENTER);
+		
+		
+		navigationPanel.add(progressBar, BorderLayout.WEST);
+		navigationPanel.add(controlPanel, BorderLayout.CENTER);
+		
+		return navigationPanel;
+	}
+	
 }
