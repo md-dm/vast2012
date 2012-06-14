@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 
 public class DataControllerTest {
 
@@ -67,6 +68,7 @@ public class DataControllerTest {
 
 	@Test
 	public void testGroup() throws Exception {
-		System.out.println(dataController.group("region-1", "branch1"));
+		DBObject group = dataController.group("region-1", "branch1");
+		System.out.println(group);
 	}
 }

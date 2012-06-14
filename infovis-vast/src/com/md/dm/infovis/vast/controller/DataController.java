@@ -1,5 +1,6 @@
 package com.md.dm.infovis.vast.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mongodb.BasicDBObject;
@@ -315,16 +316,39 @@ public class DataController {
 		BasicDBObject key = new BasicDBObject();
 		key.append("bussinesUnit", true);
 		key.append("facility", true);
+		key.append("location", true);
 
+		BasicDBObject nonEmpty = new BasicDBObject();
+		nonEmpty.append("$ne", new ArrayList());
+		
+		
 		BasicDBObject cond = new BasicDBObject();
 		cond.append("bussinesUnit", bussinesUnit);
 		cond.append("facility", facility);
+		// Filter non empty statusList
+		cond.append("statusList", nonEmpty);
+		//cond.append("statusList.policyStatus", 1);
 
 		BasicDBObject initial = new BasicDBObject();
 		initial.append("count", 0);
+		initial.append("policyStatus1", 0);
+		initial.append("policyStatus2", 0);
+		initial.append("policyStatus3", 0);
+		initial.append("policyStatus4", 0);
+		initial.append("policyStatus5", 0);
+		initial.append("activityFlag1", 0);
+		initial.append("activityFlag2", 0);
+		initial.append("activityFlag3", 0);
+		initial.append("activityFlag4", 0);
+		initial.append("activityFlag5", 0);
+		//initial.append("ipAddr", new ArrayList());
+		
 
+//		DBObject dbObject = collection.group(key, cond, initial,
+//				"function(doc, prev) { prev.count += 1; prev.ipAddr.push(doc.ipAddr); }");
 		DBObject dbObject = collection.group(key, cond, initial,
-				"function(doc, prev) { prev.count += 1 }");
+				"function(doc, prev) { prev.count += 1;  switch(doc.statusList[0].policyStatus) { case 1: prev.policyStatus1 += 1; break; case 2: prev.policyStatus2 += 1; break; case 3: prev.policyStatus3 += 1; break;case 4: prev.policyStatus4 += 1; break;case 5: prev.policyStatus5 += 1; break;} switch(doc.statusList[0].activityFlag) { case 1: prev.activityFlag1 += 1; break; case 2: prev.activityFlag2 += 1; break; case 3: prev.activityFlag3 += 1; break;case 4: prev.activityFlag4 += 1; break;case 5: prev.activityFlag5 += 1; break;}}");
+		
 		
 		return dbObject;
 	}
