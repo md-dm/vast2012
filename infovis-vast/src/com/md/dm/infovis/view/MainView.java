@@ -16,6 +16,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.JTree;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
@@ -141,24 +143,25 @@ public class MainView extends JPanel {
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Bank");
 		DefaultMutableTreeNode headQuartersNode = new DefaultMutableTreeNode("Headquarters");
 		rootNode.add(headQuartersNode);
+		
 		for(int i = 1; i <= 5; i++){
 			headQuartersNode.add(new DefaultMutableTreeNode("DataCenter-" + i));
 		}
 		
 		for(int i = 1; i <= 50; i++){
-			DefaultMutableTreeNode regionNode = new DefaultMutableTreeNode("Region-" + i);
+			DefaultMutableTreeNode regionNode = new DefaultMutableTreeNode("region-" + i);
 			rootNode.add(regionNode);
 			int branches = 50;
 			if(i>=1 && i <=10){
 				branches = 200;
 			}
 			for(int j=1; j <= branches; j++){
-				regionNode.add(new DefaultMutableTreeNode("Branch-" + j));
+				regionNode.add(new DefaultMutableTreeNode("branch" + j));
 			}
 		}
-		TreeModel yourTreeModel = new DefaultTreeModel(rootNode); 
-		CheckboxTree checkboxTree = new CheckboxTree(yourTreeModel);
-
+		TreeModel treeModel = new DefaultTreeModel(rootNode); 
+		CheckboxTree checkboxTree = new CheckboxTree(treeModel);
+		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(checkboxTree);
 		
