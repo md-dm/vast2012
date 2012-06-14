@@ -3,13 +3,15 @@
  */
 package com.md.dm.infovis.vast.map;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.List;
 
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.Waypoint;
 import org.jdesktop.swingx.mapviewer.WaypointRenderer;
+
+import com.md.dm.infovis.vast.map.PieWaypoint.Slice;
 
 /**
  * @author diego
@@ -17,53 +19,36 @@ import org.jdesktop.swingx.mapviewer.WaypointRenderer;
  */
 public class PieChartWaypointRenderer implements WaypointRenderer {
 
-	private Slice[] slices = { new Slice(5, Color.black),
-			new Slice(33, Color.green), new Slice(20, Color.yellow),
-			new Slice(15, Color.red) };
-
-	public PieChartWaypointRenderer() {
-	}
-	
-	public PieChartWaypointRenderer(Slice[] slices) {
-		super();
-		this.slices = slices;
-	}
-
 	@Override
 	public boolean paintWaypoint(Graphics2D g, JXMapViewer map, Waypoint wp) {
 
-		drawPie((Graphics2D) g, new Rectangle(-10, -10, map.getZoom()*4, map.getZoom()*4), slices);
+		PieWaypoint pieWaypoint = (PieWaypoint) wp;
+
+		drawPie((Graphics2D) g,
+				new Rectangle(-10, -10, map.getZoom() * 4, map.getZoom() * 4),
+				pieWaypoint.getSlices());
 
 		return true;
 	}
 
-	private void drawPie(Graphics2D g, Rectangle area, Slice[] slices) {
+	private void drawPie(Graphics2D g, Rectangle area, List<Slice> slices) {
 		double total = 0.0D;
-		for (int i = 0; i < slices.length; i++) {
-			total += slices[i].value;
+		
+		for (int i = 0; i < slices.size(); i++) {
+			total += slices.get(i).value;
 		}
 
 		double curValue = 0.0D;
 		int startAngle = 0;
-		for (int i = 0; i < slices.length; i++) {
+		for (int i = 0; i < slices.size(); i++) {
 			startAngle = (int) (curValue * 360 / total);
-			int arcAngle = (int) (slices[i].value * 360 / total);
+			int arcAngle = (int) (slices.get(i).value * 360 / total);
 
-			g.setColor(slices[i].color);
+			g.setColor(slices.get(i).color);
 			g.fillArc(area.x, area.y, area.width, area.height, startAngle,
 					arcAngle);
-			curValue += slices[i].value;
+			curValue += slices.get(i).value;
 		}
 	}
 
-}
-
-class Slice {
-	double value;
-	Color color;
-
-	public Slice(double value, Color color) {
-		this.value = value;
-		this.color = color;
-	}
 }

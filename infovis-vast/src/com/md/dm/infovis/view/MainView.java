@@ -29,6 +29,7 @@ import javax.swing.tree.TreePath;
 import com.md.dm.infovis.vast.controller.DataController;
 import com.md.dm.infovis.vast.controller.MapKitController;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 
 public class MainView extends JPanel {
 	
@@ -232,7 +233,7 @@ public class MainView extends JPanel {
 		System.out.println(businessUnits);
 		System.out.println(facilities);
 		
-		DBCursor dbCursor = dataController.filter((String)businessUnits.toArray()[0], (String)facilities.toArray()[0]);
+		DBObject dbCursor = dataController.group((String)businessUnits.toArray()[0], (String)facilities.toArray()[0]);
 		
 		mapKitController.showData(dbCursor);
 	}
