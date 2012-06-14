@@ -49,8 +49,7 @@ public class DataControllerTest {
 	}
 
 	/**
-	 * > db.machine.find({statusList: {$ne:[]}}).count(); 
-	 * 809216 >
+	 * > db.machine.find({statusList: {$ne:[]}}).count(); 809216 >
 	 * 
 	 * @throws Exception
 	 */
@@ -63,12 +62,31 @@ public class DataControllerTest {
 
 	@Test
 	public void testFilter() throws Exception {
-		System.out.println(dataController.filter("region-1", "branch1").count());
+		System.out
+				.println(dataController.filter("region-1", "branch1").count());
 	}
 
 	@Test
 	public void testGroup() throws Exception {
 		DBObject group = dataController.group("region-1", "branch1");
+		System.out.println(group);
+	}
+
+	@Test
+	public void testGroupWithParameter() throws Exception {
+
+		BasicDBObject key = new BasicDBObject();
+		key.append("bussinesUnit", true);
+		key.append("facility", true);
+		key.append("location", true);
+
+		BasicDBObject cond = new BasicDBObject();
+		cond.append("bussinesUnit", "region-1");
+		cond.append("facility", "branch1");
+		cond.append("statusList", new BasicDBObject("$ne", new ArrayList()));
+		// cond.append("statusList.policyStatus", 1);
+
+		DBObject group = dataController.group(key, cond);
 		System.out.println(group);
 	}
 }
