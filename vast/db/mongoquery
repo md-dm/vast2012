@@ -511,4 +511,15 @@ db.machine.group({ key: { bussinesUnit:true}, cond: { statusList:[] }, reduce: f
 
 db.machine.group({ key: { machineClass:true, bussinesUnit:true}, cond: { statusList:[] }, reduce: function(doc, prev) { prev.count += 1 }, initial: { count: 0 }});
 
-db.machine.group({ key: { bussinesUnit:true, facility:true }, cond: { statusList:[] }, reduce: function(doc, prev) { prev.count += 1 }, initial: { count: 0 }});
+db.machine.group({ key: { bussinesUnit:true, facility:true,  machineClass:true}, cond: { bussinesUnit:'headquarters', facility:'headquarters'}, reduce: function(doc, prev) { prev.count += 1}, initial: { count: 0 }});
+db.machine.group({ key: { bussinesUnit:true, facility:true,  machineClass:true}, cond: { bussinesUnit:'headquarters', facility:'headquarters', statusList: {$ne:[]} }, reduce: function(doc, prev) { prev.count += 1 }, initial: { count: 0 }});
+
+db.machine.group({ key: { bussinesUnit:true, facility:true,  machineClass:true}, cond: { bussinesUnit:'region-1', facility:'branch1'}, reduce: function(doc, prev) { prev.count += 1 }, initial: { count: 0 }});
+
+db.machine.group({ key: { bussinesUnit:true, facility:true,  machineClass:true }, cond: { bussinesUnit:'region-1', facility:'branch1' }, reduce: function(doc, prev) { prev.count += 1; prev.ipAddr.push(doc.ipAddr); prev.location.push(doc.location);}, initial: { count: 0, ipAddr:[], location:[]}});
+
+
+
+db.machine.find({bussinesUnit:'headquarters', facility:'headquarters', statusList: {$ne:[]} }).count();
+
+
