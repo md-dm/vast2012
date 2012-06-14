@@ -1,10 +1,18 @@
 package com.md.dm.infovis.view;
 
+import it.cnr.imaa.essi.lablib.gui.checkboxtree.CheckboxTree;
+import it.cnr.imaa.essi.lablib.gui.checkboxtree.TreeCheckingModel;
+
 import java.awt.BorderLayout;
 import java.awt.Checkbox;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -12,24 +20,35 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
-import javax.swing.JTree;
 import javax.swing.border.TitledBorder;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
-import org.jdesktop.swingx.JXMapKit;
-import org.jdesktop.swingx.mapviewer.DefaultTileFactory;
-import org.jdesktop.swingx.mapviewer.GeoPosition;
+import com.md.dm.infovis.vast.controller.DataController;
+import com.md.dm.infovis.vast.controller.MapKitController;
+import com.mongodb.DBCursor;
 
 public class MainView extends JPanel {
+	
+	private MapKitController mapKitController;
+	private CheckboxTree checkboxTree;
+	private DataController dataController;
 	
 	
 	public MainView() {
 		initComponents();
-		afterInitComponents();
+		afertInitComponents();
 	}
 
-	private void afterInitComponents() {
-		// TODO Auto-generated method stub
-		
+	private void afertInitComponents() {
+		try {
+			dataController = new DataController();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void initComponents() {
@@ -59,22 +78,16 @@ public class MainView extends JPanel {
 	}
 	
 	private JPanel initMap(){
-		
-		JXMapKit jXMapKit = new JXMapKit();
-		jXMapKit.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
-		jXMapKit.setAddressLocationShown(false);
-		jXMapKit.setDataProviderCreditShown(false);
-		//jXMapKit.setCenterPosition(new GeoPosition(0, 0));
-		jXMapKit.setMiniMapVisible(true);
-		jXMapKit.setZoomSliderVisible(true);
-		jXMapKit.setZoomButtonsVisible(true);
-		jXMapKit.setAddressLocationShown(true);
-		jXMapKit.setCenterPosition(new GeoPosition( 45, -90));
-		//jXMapKit.setAddressLocation(new GeoPosition(1, 1));
 
-		jXMapKit.setZoom(8);
-		((DefaultTileFactory) jXMapKit.getMainMap().getTileFactory()).setThreadPoolSize(8);
-		return jXMapKit;
+		try {
+			mapKitController = new MapKitController();
+			return mapKitController.getMapKit();
+			
+		} catch (Exception e) {
+			// TODO: informar
+			e.printStackTrace();
+		} 
+		return null;
 	}
 	
 	private JPanel initFilterPanel(){
@@ -133,12 +146,35 @@ public class MainView extends JPanel {
 		
 		JPanel regionPanel = new JPanel(new BorderLayout());
 		
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Bank");
+		DefaultMutableTreeNode headQuartersNode = new DefaultMutableTreeNode("Headquarters");
+		rootNode.add(headQuartersNode);
+		
+		for(int i = 1; i <= 5; i++){
+			headQuartersNode.add(new DefaultMutableTreeNode("DataCenter-" + i));
+		}
+		
+		for(int i = 1; i <= 50; i++){
+			DefaultMutableTreeNode regionNode = new DefaultMutableTreeNode("region-" + i);
+			rootNode.add(regionNode);
+			int branches = 50;
+			if(i>=1 && i <=10){
+				branches = 200;
+			}
+			for(int j=1; j <= branches; j++){
+				regionNode.add(new DefaultMutableTreeNode("branch" + j));
+			}
+		}
+		TreeModel treeModel = new DefaultTreeModel(rootNode); 
+		checkboxTree = new CheckboxTree(treeModel);
+		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setViewportView(new JTree());
+		scrollPane.setViewportView(checkboxTree);
 		
 		regionPanel.add(scrollPane, BorderLayout.CENTER);
-		return regionPanel;
+		
 	
+		return regionPanel;
 	}
 	
 	private JPanel initNavigationPanel(){
@@ -146,10 +182,22 @@ public class MainView extends JPanel {
 		
 		JProgressBar progressBar = new JProgressBar();
 		JSlider slider = new JSlider();
+		JButton applyButton = new JButton("Apply");
+		applyButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				showData();
+			}
+		});
 		JToggleButton toggleButton = new JToggleButton("Play");
 
 		JPanel controlPanel = new JPanel(new BorderLayout());
-		controlPanel.add(toggleButton, BorderLayout.WEST);
+		JPanel buttonPanel = new JPanel(new BorderLayout());
+		buttonPanel.add(applyButton, BorderLayout.WEST);
+		buttonPanel.add(toggleButton, BorderLayout.EAST);
+		
+		controlPanel.add(buttonPanel, BorderLayout.WEST);
 		controlPanel.add(slider, BorderLayout.CENTER);
 		
 		
@@ -157,6 +205,36 @@ public class MainView extends JPanel {
 		navigationPanel.add(controlPanel, BorderLayout.CENTER);
 		
 		return navigationPanel;
+	}
+	
+	private void showData(){
+		
+		Set<String> businessUnits = new HashSet<String>();
+		Set<String> facilities = new HashSet<String>();
+		
+		TreeCheckingModel checkingModel = ((CheckboxTree) checkboxTree).getCheckingModel();
+		TreePath[] checkingPaths = checkingModel.getCheckingPaths();
+		for (int i = 0; i < checkingPaths.length; i++) {
+			boolean checked = checkingModel.isPathChecked(checkingPaths[i]);
+			if(checked){
+				System.out.println(checkingPaths[i] + " " + checked);
+
+				DefaultMutableTreeNode businessUnit = (DefaultMutableTreeNode)checkingPaths[i].getPathComponent(1);
+				businessUnits.add((String)businessUnit.getUserObject());
+				
+				if(checkingPaths[i].getPathCount() > 2){
+					DefaultMutableTreeNode facility = (DefaultMutableTreeNode)checkingPaths[i].getPathComponent(2);
+					facilities.add((String)facility.getUserObject());
+				}
+			}
+		}
+		
+		System.out.println(businessUnits);
+		System.out.println(facilities);
+		
+		DBCursor dbCursor = dataController.filter((String)businessUnits.toArray()[0], (String)facilities.toArray()[0]);
+		
+		mapKitController.showData(dbCursor);
 	}
 	
 }

@@ -11,6 +11,7 @@ import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.Waypoint;
 import org.jdesktop.swingx.mapviewer.WaypointPainter;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
@@ -18,20 +19,28 @@ import com.mongodb.DBObject;
  * @author diego
  * 
  */
-public class PieChartWaipontPainter extends WaypointPainter<JXMapViewer> {
+public class PieChartWaypontPainter extends WaypointPainter<JXMapViewer> {
 
 	private Set<Waypoint> waypoints;
 
-	public PieChartWaipontPainter(Set<Waypoint> waypoints) {
+	public PieChartWaypontPainter(Set<Waypoint> waypoints) {
 		super();
 		this.waypoints = waypoints;
 		this.setRenderer(new PieChartWaypointRenderer());
 	}
 
-	public PieChartWaipontPainter(DBCursor cursor) {
+	public PieChartWaypontPainter(DBCursor cursor) {
 		waypoints = new HashSet<Waypoint>();
+		
 		for (DBObject dbObject : cursor) {
-			System.out.println(dbObject.get("location"));
+			
+			BasicDBList basicDBList = (BasicDBList)dbObject.get("location");
+			
+			double latitude = (Double)basicDBList.get(0);
+			double longitude = (Double)basicDBList.get(1);
+			waypoints.add(new Waypoint(latitude, longitude));
+			
+			//waypoints.add(new Waypoint(latitude, longitude));
 			
 		}
 		this.setRenderer(new PieChartWaypointRenderer());
@@ -40,7 +49,7 @@ public class PieChartWaipontPainter extends WaypointPainter<JXMapViewer> {
 	/**
 	 * Generates with random points!
 	 */
-	public PieChartWaipontPainter() {
+	public PieChartWaypontPainter() {
 		waypoints = new HashSet<Waypoint>();
 		Random rn = new Random();
 		for (int i = 0; i < 4000; i++) {
