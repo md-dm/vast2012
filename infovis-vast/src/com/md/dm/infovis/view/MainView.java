@@ -1,5 +1,7 @@
 package com.md.dm.infovis.view;
 
+import it.cnr.imaa.essi.lablib.gui.checkboxtree.CheckboxTree;
+
 import java.awt.BorderLayout;
 import java.awt.Checkbox;
 import java.awt.GridLayout;
@@ -14,6 +16,9 @@ import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.JTree;
 import javax.swing.border.TitledBorder;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.mapviewer.DefaultTileFactory;
@@ -133,12 +138,34 @@ public class MainView extends JPanel {
 		
 		JPanel regionPanel = new JPanel(new BorderLayout());
 		
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Bank");
+		DefaultMutableTreeNode headQuartersNode = new DefaultMutableTreeNode("Headquarters");
+		rootNode.add(headQuartersNode);
+		for(int i = 1; i <= 5; i++){
+			headQuartersNode.add(new DefaultMutableTreeNode("DataCenter-" + i));
+		}
+		
+		for(int i = 1; i <= 50; i++){
+			DefaultMutableTreeNode regionNode = new DefaultMutableTreeNode("Region-" + i);
+			rootNode.add(regionNode);
+			int branches = 50;
+			if(i>=1 && i <=10){
+				branches = 200;
+			}
+			for(int j=1; j <= branches; j++){
+				regionNode.add(new DefaultMutableTreeNode("Branch-" + j));
+			}
+		}
+		TreeModel yourTreeModel = new DefaultTreeModel(rootNode); 
+		CheckboxTree checkboxTree = new CheckboxTree(yourTreeModel);
+
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setViewportView(new JTree());
+		scrollPane.setViewportView(checkboxTree);
 		
 		regionPanel.add(scrollPane, BorderLayout.CENTER);
-		return regionPanel;
+		
 	
+		return regionPanel;
 	}
 	
 	private JPanel initNavigationPanel(){
