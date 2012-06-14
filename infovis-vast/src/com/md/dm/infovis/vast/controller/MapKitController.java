@@ -31,7 +31,7 @@ public class MapKitController {
 
 	public MapKitController() throws Exception {
 		mapKit = new JXMapKit();
-		dataController = new DataController();
+		//dataController = new DataController();
 		mapKit.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
 		mapKit.setAddressLocationShown(false);
 		mapKit.setDataProviderCreditShown(false);
@@ -44,17 +44,27 @@ public class MapKitController {
 		// jXMapKit.setAddressLocation(new GeoPosition(1, 1));
 
 		mapKit.setZoom(8);
-		((DefaultTileFactory) mapKit.getMainMap().getTileFactory())
-				.setThreadPoolSize(8);
-
+//		((DefaultTileFactory) mapKit.getMainMap().getTileFactory())
+//				.setThreadPoolSize(8);
+//
+//		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
+//				new PieChartWaypontPainter(dataController.filter("region-1", "branch1")), new PolygonPainter());
+//		
+//		compoundPainter.setCacheable(false);
+//
+//		
+//		
+//		this.setOverlayPainter(compoundPainter);
+	}
+	
+	public void showData(DBCursor cursor){
 		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
-				new PieChartWaypontPainter(dataController.filter("region-1", "branch1")), new PolygonPainter());
+				new PieChartWaypontPainter(cursor), new PolygonPainter());
 		
 		compoundPainter.setCacheable(false);
 
-		
-		
 		this.setOverlayPainter(compoundPainter);
+		
 	}
 
 	public void addWaypoints() {

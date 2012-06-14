@@ -1,12 +1,18 @@
 package com.md.dm.infovis.view;
 
 import it.cnr.imaa.essi.lablib.gui.checkboxtree.CheckboxTree;
+import it.cnr.imaa.essi.lablib.gui.checkboxtree.TreeCheckingModel;
 
 import java.awt.BorderLayout;
 import java.awt.Checkbox;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -14,27 +20,35 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
-import javax.swing.JTree;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
-import org.jdesktop.swingx.JXMapKit;
-import org.jdesktop.swingx.mapviewer.DefaultTileFactory;
-import org.jdesktop.swingx.mapviewer.GeoPosition;
-
+import com.md.dm.infovis.vast.controller.DataController;
 import com.md.dm.infovis.vast.controller.MapKitController;
+import com.mongodb.DBCursor;
 
 public class MainView extends JPanel {
 	
 	private MapKitController mapKitController;
+	private CheckboxTree checkboxTree;
+	private DataController dataController;
 	
 	
 	public MainView() {
 		initComponents();
+		afertInitComponents();
+	}
+
+	private void afertInitComponents() {
+		try {
+			dataController = new DataController();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void initComponents() {
@@ -152,7 +166,7 @@ public class MainView extends JPanel {
 			}
 		}
 		TreeModel treeModel = new DefaultTreeModel(rootNode); 
-		CheckboxTree checkboxTree = new CheckboxTree(treeModel);
+		checkboxTree = new CheckboxTree(treeModel);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(checkboxTree);
@@ -168,10 +182,22 @@ public class MainView extends JPanel {
 		
 		JProgressBar progressBar = new JProgressBar();
 		JSlider slider = new JSlider();
+		JButton applyButton = new JButton("Apply");
+		applyButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				showData();
+			}
+		});
 		JToggleButton toggleButton = new JToggleButton("Play");
 
 		JPanel controlPanel = new JPanel(new BorderLayout());
-		controlPanel.add(toggleButton, BorderLayout.WEST);
+		JPanel buttonPanel = new JPanel(new BorderLayout());
+		buttonPanel.add(applyButton, BorderLayout.WEST);
+		buttonPanel.add(toggleButton, BorderLayout.EAST);
+		
+		controlPanel.add(buttonPanel, BorderLayout.WEST);
 		controlPanel.add(slider, BorderLayout.CENTER);
 		
 		
@@ -179,6 +205,36 @@ public class MainView extends JPanel {
 		navigationPanel.add(controlPanel, BorderLayout.CENTER);
 		
 		return navigationPanel;
+	}
+	
+	private void showData(){
+		
+		Set<String> businessUnits = new HashSet<String>();
+		Set<String> facilities = new HashSet<String>();
+		
+		TreeCheckingModel checkingModel = ((CheckboxTree) checkboxTree).getCheckingModel();
+		TreePath[] checkingPaths = checkingModel.getCheckingPaths();
+		for (int i = 0; i < checkingPaths.length; i++) {
+			boolean checked = checkingModel.isPathChecked(checkingPaths[i]);
+			if(checked){
+				System.out.println(checkingPaths[i] + " " + checked);
+
+				DefaultMutableTreeNode businessUnit = (DefaultMutableTreeNode)checkingPaths[i].getPathComponent(1);
+				businessUnits.add((String)businessUnit.getUserObject());
+				
+				if(checkingPaths[i].getPathCount() > 2){
+					DefaultMutableTreeNode facility = (DefaultMutableTreeNode)checkingPaths[i].getPathComponent(2);
+					facilities.add((String)facility.getUserObject());
+				}
+			}
+		}
+		
+		System.out.println(businessUnits);
+		System.out.println(facilities);
+		
+		DBCursor dbCursor = dataController.filter((String)businessUnits.toArray()[0], (String)facilities.toArray()[0]);
+		
+		mapKitController.showData(dbCursor);
 	}
 	
 }
