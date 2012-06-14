@@ -11,7 +11,7 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.Painter;
 
-import com.md.dm.infovis.vast.map.PieChartWaipontPainter;
+import com.md.dm.infovis.vast.map.PieChartWaypontPainter;
 import com.md.dm.infovis.vast.map.PolygonPainter;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
@@ -48,7 +48,7 @@ public class MapKitController {
 				.setThreadPoolSize(8);
 
 		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
-				new PieChartWaipontPainter(dataController.filter("region-1", "branch1")), new PolygonPainter());
+				new PieChartWaypontPainter(dataController.filter("region-1", "branch1")), new PolygonPainter());
 		
 		compoundPainter.setCacheable(false);
 

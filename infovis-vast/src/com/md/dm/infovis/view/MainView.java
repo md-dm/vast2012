@@ -24,17 +24,15 @@ import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.mapviewer.DefaultTileFactory;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
+import com.md.dm.infovis.vast.controller.MapKitController;
+
 public class MainView extends JPanel {
+	
+	private MapKitController mapKitController;
 	
 	
 	public MainView() {
 		initComponents();
-		afterInitComponents();
-	}
-
-	private void afterInitComponents() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	private void initComponents() {
@@ -64,22 +62,16 @@ public class MainView extends JPanel {
 	}
 	
 	private JPanel initMap(){
-		
-		JXMapKit jXMapKit = new JXMapKit();
-		jXMapKit.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
-		jXMapKit.setAddressLocationShown(false);
-		jXMapKit.setDataProviderCreditShown(false);
-		//jXMapKit.setCenterPosition(new GeoPosition(0, 0));
-		jXMapKit.setMiniMapVisible(true);
-		jXMapKit.setZoomSliderVisible(true);
-		jXMapKit.setZoomButtonsVisible(true);
-		jXMapKit.setAddressLocationShown(true);
-		jXMapKit.setCenterPosition(new GeoPosition( 45, -90));
-		//jXMapKit.setAddressLocation(new GeoPosition(1, 1));
 
-		jXMapKit.setZoom(8);
-		((DefaultTileFactory) jXMapKit.getMainMap().getTileFactory()).setThreadPoolSize(8);
-		return jXMapKit;
+		try {
+			mapKitController = new MapKitController();
+			return mapKitController.getMapKit();
+			
+		} catch (Exception e) {
+			// TODO: informar
+			e.printStackTrace();
+		} 
+		return null;
 	}
 	
 	private JPanel initFilterPanel(){

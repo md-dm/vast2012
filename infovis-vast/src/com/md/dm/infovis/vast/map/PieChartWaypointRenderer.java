@@ -32,7 +32,7 @@ public class PieChartWaypointRenderer implements WaypointRenderer {
 	@Override
 	public boolean paintWaypoint(Graphics2D g, JXMapViewer map, Waypoint wp) {
 
-		drawPie((Graphics2D) g, new Rectangle(-10, -10, 8, 8), slices);
+		drawPie((Graphics2D) g, new Rectangle(-10, -10, map.getZoom()*4, map.getZoom()*4), slices);
 
 		return true;
 	}
