@@ -25,7 +25,7 @@ public class PieChartWaypointRenderer implements WaypointRenderer {
 		PieWaypoint pieWaypoint = (PieWaypoint) wp;
 
 		drawPie((Graphics2D) g,
-				new Rectangle(-10, -10, map.getZoom() * 4, map.getZoom() * 4),
+				new Rectangle(-10, -10, map.getZoom() * 2, map.getZoom() * 2),
 				pieWaypoint.getSlices());
 
 		return true;

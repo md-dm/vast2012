@@ -34,15 +34,15 @@ public class PieWaypoint extends Waypoint {
 		return Arrays
 				.asList(new Slice[] {
 						new Slice((Double) dbObject.get("policyStatus1"),
-								Color.black),
+								new Color(26, 150, 65, 100)),
 						new Slice((Double) dbObject.get("policyStatus2"),
-								Color.green),
+								new Color(166, 217, 106, 100)),
 						new Slice((Double) dbObject.get("policyStatus3"),
-								Color.yellow),
+								new Color(255, 255, 191, 100)),
 						new Slice((Double) dbObject.get("policyStatus4"),
-								Color.lightGray),
+								new Color(253, 174, 97, 100)),
 						new Slice((Double) dbObject.get("policyStatus5"),
-								Color.red) });
+								new Color(215, 25, 28, 100)) });
 	}
 
 	@Override

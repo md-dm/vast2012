@@ -64,8 +64,8 @@ public class PolygonPainter implements Painter<JXMapViewer> {
 
 		// do the drawing
 		g.setColor(new Color(255, 0, 0, 100));
-		g.fill(poly);
-		g.setColor(Color.RED);
+		//g.fill(poly);
+		g.setColor(Color.LIGHT_GRAY);
 		g.draw(poly);
 
 		g.dispose();

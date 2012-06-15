@@ -1,6 +1,8 @@
 package com.md.dm.infovis.vast.controller;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import junit.framework.Assert;
 
@@ -101,11 +103,14 @@ public class DataControllerTest {
 
 		QueryBuilder qb = new QueryBuilder();
 		qb.put("statusList").notEquals(new ArrayList());
+		qb.put("statusList.policyStatus").in(new int[]{4,5});
 		
-		for (int i = 1; i < 20; i++) {
-			qb.or(new BasicDBObject("bussinesUnit", "region-1").append("facility",
-					"branch" + i));
-		}
+//		for (int i = 1; i < 20; i++) {
+//			qb.or(new BasicDBObject("bussinesUnit", "region-1").append("facility",
+//					"branch" + i));
+//		}
+		
+		System.out.println(qb.get());
 		
 		DBObject group = dataController.group(key, qb.get());
 
