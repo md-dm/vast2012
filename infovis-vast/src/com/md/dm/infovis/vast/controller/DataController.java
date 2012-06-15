@@ -304,7 +304,7 @@ public class DataController {
 
 	}
 
-	public DBObject group(BasicDBObject key, BasicDBObject cond) {
+	public DBObject group(BasicDBObject key, DBObject cond) {
 
 		BasicDBObject initial = new BasicDBObject();
 		initial.append("count", 0);

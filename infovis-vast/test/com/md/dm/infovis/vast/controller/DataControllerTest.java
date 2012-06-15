@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+import com.mongodb.QueryBuilder;
 
 public class DataControllerTest {
 
@@ -89,4 +90,26 @@ public class DataControllerTest {
 		DBObject group = dataController.group(key, cond);
 		System.out.println(group);
 	}
+
+	@Test
+	public void testGroupWithOrParameter() throws Exception {
+
+		BasicDBObject key = new BasicDBObject();
+		key.append("bussinesUnit", true);
+		key.append("facility", true);
+		key.append("location", true);
+
+		QueryBuilder qb = new QueryBuilder();
+		qb.put("statusList").notEquals(new ArrayList());
+		
+		for (int i = 1; i < 20; i++) {
+			qb.or(new BasicDBObject("bussinesUnit", "region-1").append("facility",
+					"branch" + i));
+		}
+		
+		DBObject group = dataController.group(key, qb.get());
+
+		System.out.println(group);
+	}
+
 }
