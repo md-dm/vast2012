@@ -9,7 +9,9 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.BoxLayout;
@@ -30,7 +32,6 @@ import javax.swing.tree.TreePath;
 import com.md.dm.infovis.vast.controller.DataController;
 import com.md.dm.infovis.vast.controller.MapKitController;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
 
@@ -39,6 +40,20 @@ public class MainView extends JPanel {
 	private MapKitController mapKitController;
 	private CheckboxTree checkboxTree;
 	private DataController dataController;
+	private Checkbox healthy;
+	private Checkbox moderate;
+	private Checkbox nonNormal;
+	private Checkbox critical;
+	private Checkbox infected;
+	private HashMap<Checkbox, Integer> policyCheckboxMap;
+	private HashMap<Checkbox, Integer> activityCheckboxMap;
+	private Checkbox normal;
+	private Checkbox goingDown;
+	private Checkbox invalidLogin;
+	private Checkbox fullyConsumed;
+	private Checkbox deviceAdded;
+	private ArrayList<Checkbox> machineFunctionList;
+	private ArrayList<Checkbox> machineClassList;
 
 	public MainView() {
 		initComponents();
@@ -48,6 +63,18 @@ public class MainView extends JPanel {
 	private void afertInitComponents() {
 		try {
 			dataController = new DataController();
+			policyCheckboxMap = new HashMap<Checkbox, Integer>();
+			policyCheckboxMap.put(healthy, 1);
+			policyCheckboxMap.put(moderate, 2);
+			policyCheckboxMap.put(nonNormal, 3);
+			policyCheckboxMap.put(critical, 4);
+			policyCheckboxMap.put(infected, 5);
+			activityCheckboxMap = new HashMap<Checkbox, Integer>();
+			activityCheckboxMap.put(normal, 1);
+			activityCheckboxMap.put(goingDown, 2);
+			activityCheckboxMap.put(invalidLogin, 3);
+			activityCheckboxMap.put(fullyConsumed, 4);
+			activityCheckboxMap.put(deviceAdded, 5);			
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -104,11 +131,11 @@ public class MainView extends JPanel {
 		JPanel policyStatusPanel = new JPanel();
 		policyStatusPanel.setBorder(new TitledBorder("Policy Status"));
 		policyStatusPanel.setLayout(new GridLayout(5, 0));
-		Checkbox healthy = new Checkbox("Healthy");
-		Checkbox moderate = new Checkbox("Moderate");
-		Checkbox nonNormal = new Checkbox("Non normal");
-		Checkbox critical = new Checkbox("Critical");
-		Checkbox infected = new Checkbox("Infected");
+		healthy = new Checkbox("Healthy");
+		moderate = new Checkbox("Moderate");
+		nonNormal = new Checkbox("Non normal");
+		critical = new Checkbox("Critical");
+		infected = new Checkbox("Infected");
 
 		policyStatusPanel.add(healthy);
 		policyStatusPanel.add(moderate);
@@ -121,11 +148,11 @@ public class MainView extends JPanel {
 		JPanel activityFlagPanel = new JPanel();
 		activityFlagPanel.setBorder(new TitledBorder("Activity Flag"));
 		activityFlagPanel.setLayout(new GridLayout(5, 0));
-		Checkbox normal = new Checkbox("Normal");
-		Checkbox goingDown = new Checkbox("Going down");
-		Checkbox invalidLogin = new Checkbox("5 invalid login");
-		Checkbox fullyConsumed = new Checkbox("CPU fully consumed");
-		Checkbox deviceAdded = new Checkbox("Device added");
+		normal = new Checkbox("Normal");
+		goingDown = new Checkbox("Going down");
+		invalidLogin = new Checkbox("5 invalid login");
+		fullyConsumed = new Checkbox("CPU fully consumed");
+		deviceAdded = new Checkbox("Device added");
 
 		activityFlagPanel.add(normal);
 		activityFlagPanel.add(goingDown);
@@ -135,6 +162,41 @@ public class MainView extends JPanel {
 
 		filterPanel.add(activityFlagPanel);
 
+		JPanel machineClassPanel = new JPanel();
+		machineClassPanel.setBorder(new TitledBorder("Machine Class"));
+		machineClassPanel.setLayout(new GridLayout(3, 0));
+		machineClassList = new ArrayList<Checkbox>();
+		machineClassList.add(new Checkbox("workstation"));
+		machineClassList.add(new Checkbox("server"));
+		machineClassList.add(new Checkbox("atm"));
+
+		for (Checkbox checkbox : machineClassList) {
+			machineClassPanel.add(checkbox);
+		}
+
+		filterPanel.add(machineClassPanel);
+
+		JPanel machineFunctionPanel = new JPanel();
+		machineFunctionPanel.setBorder(new TitledBorder("Machine Class"));
+		machineFunctionPanel.setLayout(new GridLayout(9, 0));
+		machineFunctionList = new ArrayList<Checkbox>();
+		machineFunctionList.add(new Checkbox(""));
+		machineFunctionList.add(new Checkbox("web"));
+		machineFunctionList.add(new Checkbox("multiple"));
+		machineFunctionList.add(new Checkbox("office"));
+		machineFunctionList.add(new Checkbox("email"));
+		machineFunctionList.add(new Checkbox("teller"));
+		machineFunctionList.add(new Checkbox("compute"));
+		machineFunctionList.add(new Checkbox("loan"));
+		machineFunctionList.add(new Checkbox("file server"));
+
+		for (Checkbox checkbox : machineFunctionList) {
+			machineFunctionPanel.add(checkbox);
+		}
+
+		filterPanel.add(machineFunctionPanel);
+
+		
 		JPanel numConnectionsPanel = new JPanel();
 		numConnectionsPanel.setBorder(new TitledBorder("# Connections"));
 		numConnectionsPanel.setLayout(new GridLayout(1, 1));
@@ -255,7 +317,56 @@ public class MainView extends JPanel {
 
 		System.out.println(businessUnits);
 		System.out.println(facilities);
+		
+		
+		//Filter policystatus
+		Set<Checkbox> keySet = policyCheckboxMap.keySet();
+		List<Integer> statuses = new ArrayList<Integer>();
+		for (Checkbox checkbox : keySet) {
+			if(checkbox.getState() == true){
+				statuses.add(policyCheckboxMap.get(checkbox));
+			}
+		}
+		
+		if(!statuses.isEmpty()){
+			qb.put("statusList.policyStatus").in(statuses);
+		}
 
+		//Filter activityflag
+		keySet = activityCheckboxMap.keySet();
+		statuses = new ArrayList<Integer>();
+		for (Checkbox checkbox : keySet) {
+			if(checkbox.getState() == true){
+				statuses.add(activityCheckboxMap.get(checkbox));
+			}
+		}
+		
+		if(!statuses.isEmpty()){
+			qb.put("statusList.activityFlag").in(statuses);
+		}
+		
+		//Filter machine class
+		List<String> filters = new ArrayList<String>();
+		for (Checkbox checkbox : machineClassList) {
+			if(checkbox.getState() == true){
+				filters.add(checkbox.getLabel());
+			}			
+		}
+		if(!filters.isEmpty()){
+			qb.put("machineClass").in(filters);
+		}
+		//Filter machine function
+		filters = new ArrayList<String>();
+		for (Checkbox checkbox : machineFunctionList) {
+			if(checkbox.getState() == true){
+				filters.add(checkbox.getLabel());
+			}			
+		}
+		if(!filters.isEmpty()){
+			qb.put("machineFunction").in(filters);
+		}
+		
+		System.out.println(qb.get());
 		DBObject group = dataController.group(key, qb.get());
 		mapKitController.showData(group);
 	}
