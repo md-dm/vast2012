@@ -1,5 +1,7 @@
 package com.md.dm.infovis.vast.controller;
 
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 
 import junit.framework.Assert;
@@ -13,6 +15,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+import com.mongodb.Mongo;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteConcern;
 
@@ -145,10 +148,30 @@ public class DataControllerTest {
 			region.insert((DBObject)object);
 		}
 		
-		//region.ensureIndex(keys);
+		region.ensureIndex(new BasicDBObject("bussinesUnit", 1).append("facility", 1));
+		region.ensureIndex(new BasicDBObject("bussinesUnit", 1));
+		region.ensureIndex(new BasicDBObject("facility", 1));
+		region.ensureIndex(new BasicDBObject("location", "2d"));
+		region.ensureIndex(new BasicDBObject("policyStatus1", 1));
+		region.ensureIndex(new BasicDBObject("policyStatus2", 1));
+		region.ensureIndex(new BasicDBObject("policyStatus3", 1));
+		region.ensureIndex(new BasicDBObject("policyStatus4", 1));
+		region.ensureIndex(new BasicDBObject("policyStatus5", 1));
+		region.ensureIndex(new BasicDBObject("activityFlag1", 1));
+		region.ensureIndex(new BasicDBObject("activityFlag2", 1));
+		region.ensureIndex(new BasicDBObject("activityFlag3", 1));
+		region.ensureIndex(new BasicDBObject("activityFlag4", 1));
+		region.ensureIndex(new BasicDBObject("activityFlag5", 1));
 		
 		System.out.println(region.count());
 
+	}
+	
+	@Test
+	public void testFilterRegions() throws Exception {
+		
+		DataController machineDataController = new DataController(new Mongo("localhost:27022"), "vast", "region");
+		System.out.println(machineDataController.find(QueryBuilder.start().get()).count());
 	}
 
 }

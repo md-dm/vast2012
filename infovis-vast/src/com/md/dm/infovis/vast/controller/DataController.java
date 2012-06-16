@@ -303,6 +303,9 @@ public class DataController {
 		return collection.find(query);
 
 	}
+	public DBCursor filter(DBObject query) {
+		return collection.find(query);
+	}
 
 	public DBObject group(BasicDBObject key, DBObject cond) {
 
