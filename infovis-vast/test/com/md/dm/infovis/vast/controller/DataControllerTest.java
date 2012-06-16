@@ -1,8 +1,6 @@
 package com.md.dm.infovis.vast.controller;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import junit.framework.Assert;
 
@@ -10,10 +8,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
+import com.mongodb.WriteConcern;
 
 public class DataControllerTest {
 
@@ -65,8 +66,7 @@ public class DataControllerTest {
 
 	@Test
 	public void testFilter() throws Exception {
-		System.out
-				.println(dataController.filter("region-1", "branch1").count());
+		System.out.println(dataController.filter("region-1", "branch1").count());
 	}
 
 	@Test
@@ -103,18 +103,52 @@ public class DataControllerTest {
 
 		QueryBuilder qb = new QueryBuilder();
 		qb.put("statusList").notEquals(new ArrayList());
-		qb.put("statusList.policyStatus").in(new int[]{4,5});
-		
-//		for (int i = 1; i < 20; i++) {
-//			qb.or(new BasicDBObject("bussinesUnit", "region-1").append("facility",
-//					"branch" + i));
-//		}
-		
+		qb.put("statusList.policyStatus").in(new int[] { 4, 5 });
+
+		// for (int i = 1; i < 20; i++) {
+		// qb.or(new BasicDBObject("bussinesUnit",
+		// "region-1").append("facility",
+		// "branch" + i));
+		// }
+
 		System.out.println(qb.get());
-		
+
 		DBObject group = dataController.group(key, qb.get());
 
 		System.out.println(group);
+	}
+
+	@Test
+	public void testCreateNewCollectionFromGroup() throws Exception {
+
+		BasicDBObject key = new BasicDBObject();
+		key.append("bussinesUnit", true);
+		key.append("facility", true);
+		key.append("location", true);
+
+		DB db = dataController.getDB("vast");
+		
+		if(db.collectionExists("region")){
+			DBCollection collection = db.getCollection("region");
+			collection.drop();
+		}
+		
+		
+		QueryBuilder qb = new QueryBuilder();
+		//qb.put("statusList").notEquals(new ArrayList());
+		DBObject group = dataController.group(key, qb.get());
+
+		DBCollection region = db.createCollection("region", null);
+		
+		BasicDBList basicDBList = (BasicDBList) group;
+		for (Object object : basicDBList) {
+			region.insert((DBObject)object);
+		}
+		
+		//region.ensureIndex(keys);
+		
+		System.out.println(region.count());
+
 	}
 
 }
