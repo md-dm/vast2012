@@ -67,8 +67,6 @@ public class MapKitController {
 		mapKit.setZoomSliderVisible(true);
 		mapKit.setZoomButtonsVisible(true);
 		mapKit.setAddressLocationShown(true);
-		mapKit.setCenterPosition(new GeoPosition(1, 1));
-		mapKit.setAddressLocation(new GeoPosition(1, 1));
 		mapKit.getMainMap().setDrawTileBorders(true);
 		mapKit.getMainMap().setHorizontalWrapped(true);
 		mapKit.getMainMap().setRecenterOnClickEnabled(true);
@@ -96,6 +94,20 @@ public class MapKitController {
 		//
 		//
 		// this.setOverlayPainter(compoundPainter);
+		mapKit.setCenterPosition(new GeoPosition(45, -90));
+		// jXMapKit.setAddressLocation(new GeoPosition(1, 1));
+		mapKit.setZoom(15);
+//		((DefaultTileFactory) mapKit.getMainMap().getTileFactory())
+//				.setThreadPoolSize(8);
+//
+//		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
+//				new PieChartWaypontPainter(dataController.filter("region-1", "branch1")), new PolygonPainter());
+//		
+//		compoundPainter.setCacheable(false);
+//
+//		
+//		
+//		this.setOverlayPainter(compoundPainter);
 	}
 
 	public void showData(DBObject dBObject) {
@@ -105,9 +117,19 @@ public class MapKitController {
 		compoundPainter.setCacheable(false);
 
 		this.setOverlayPainter(compoundPainter);
-
 	}
+	
+	public void showData(DBCursor cursor){
+		
+		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
+				new PieChartWaypontPainter(cursor), new PolygonPainter());
+		
+		compoundPainter.setCacheable(false);
 
+		this.setOverlayPainter(compoundPainter);
+	}
+		
+		
 	public void addWaypoints() {
 
 	}
