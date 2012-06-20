@@ -20,26 +20,26 @@ import com.mongodb.DBObject;
  */
 public class PieChartWaypontPainter extends WaypointPainter<JXMapViewer> {
 
-	public PieChartWaypontPainter(DBCursor cursor) {
+	public PieChartWaypontPainter(DBCursor cursor, String pieType) {
 
 		Set<Waypoint> points = new HashSet<Waypoint>();
 
 		for (DBObject dbObject : cursor) {
-			points.add(new PieWaypoint(dbObject));
+			points.add(new PieWaypoint(dbObject, pieType));
 		}
 		this.setWaypoints(points);
 
 		this.setRenderer(new PieChartWaypointRenderer());
 	}
 
-	public PieChartWaypontPainter(DBObject dbObject) {
+	public PieChartWaypontPainter(DBObject dbObject, String pieType) {
 		Set<Waypoint> points = new HashSet<Waypoint>();
 
 		BasicDBList basicDBList = (BasicDBList) dbObject;
 
 		for (int i = 0; i < basicDBList.size(); i++) {
 			DBObject object = (DBObject) basicDBList.get(i);
-			points.add(new PieWaypoint(object));
+			points.add(new PieWaypoint(object, pieType));
 		}
 
 		this.setWaypoints(points);

@@ -110,19 +110,19 @@ public class MapKitController {
 //		this.setOverlayPainter(compoundPainter);
 	}
 
-	public void showData(DBObject dBObject) {
+	public void showData(DBObject dBObject, String pieType) {
 		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
-				new PieChartWaypontPainter(dBObject), new PolygonPainter());
+				new PieChartWaypontPainter(dBObject, pieType), new PolygonPainter());
 
 		compoundPainter.setCacheable(false);
 
 		this.setOverlayPainter(compoundPainter);
 	}
 	
-	public void showData(DBCursor cursor){
+	public void showData(DBCursor cursor, String pieType){
 		
 		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
-				new PieChartWaypontPainter(cursor), new PolygonPainter());
+				new PieChartWaypontPainter(cursor, pieType), new PolygonPainter());
 		
 		compoundPainter.setCacheable(false);
 

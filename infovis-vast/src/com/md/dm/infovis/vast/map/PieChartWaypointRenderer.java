@@ -37,14 +37,23 @@ public class PieChartWaypointRenderer implements WaypointRenderer {
 			total += slices.get(i).value;
 		}
 		// System.out.println(total);
-		int ratio = 1;// small regions
-		if (total > 50) {
-			ratio = 2;// large regions
+		int ratio = 1;// branchs
+		if (total > 100) {
+			ratio = 2;// small region headquarters
 		}
-		if (total > 200) {
-			ratio = 4;// headquarters
+		if (total > 5000) {
+			ratio = 4;// small regions
 		}
-
+		if (total > 15000) {
+			ratio = 6;// headquarters
+		}
+		if (total > 20000) {
+			ratio = 7;// large regions, and large regions headquartes
+		}
+		if (total > 50000) {
+			ratio = 10;// datacenters headquarters
+		}
+		
 		int width = (15 - (zoom - 1)) * 4 * ratio;
 		int height = (15 - (zoom - 1)) * 4 * ratio;
 		Rectangle area = new Rectangle(-1 * width / 2, -1 * height / 2, width, height);
