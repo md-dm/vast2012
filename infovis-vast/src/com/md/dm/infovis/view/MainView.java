@@ -5,6 +5,7 @@ import it.cnr.imaa.essi.lablib.gui.checkboxtree.TreeCheckingModel;
 
 import java.awt.BorderLayout;
 import java.awt.Checkbox;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +18,7 @@ import java.util.Set;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -130,19 +132,44 @@ public class MainView extends JPanel {
 
 		JPanel policyStatusPanel = new JPanel();
 		policyStatusPanel.setBorder(new TitledBorder("Policy Status"));
-		policyStatusPanel.setLayout(new GridLayout(5, 0));
+		policyStatusPanel.setLayout(new BorderLayout());
+		JPanel centerPanel = new JPanel(new GridLayout(5, 0));
 		healthy = new Checkbox("Healthy");
 		moderate = new Checkbox("Moderate");
 		nonNormal = new Checkbox("Non normal");
 		critical = new Checkbox("Critical");
 		infected = new Checkbox("Infected");
 
-		policyStatusPanel.add(healthy);
-		policyStatusPanel.add(moderate);
-		policyStatusPanel.add(nonNormal);
-		policyStatusPanel.add(critical);
-		policyStatusPanel.add(infected);
+		centerPanel.add(healthy);
+		centerPanel.add(moderate);
+		centerPanel.add(nonNormal);
+		centerPanel.add(critical);
+		centerPanel.add(infected);
+		
+		JPanel eastPanel = new JPanel(new GridLayout(5, 0));
+		JLabel label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(26, 150, 65, 100));
+		eastPanel.add(label);
+		label = new JLabel("");
+		label.setOpaque(true);
+		label.setBackground(new Color(166, 217, 106, 100));
+		eastPanel.add(label);
+		label = new JLabel("");
+		label.setOpaque(true);
+		label.setBackground(new Color(255, 255, 191, 100));
+		eastPanel.add(label);
+		label = new JLabel("");
+		label.setOpaque(true);
+		label.setBackground(new Color(253, 174, 97, 100));
+		eastPanel.add(label);
+		label = new JLabel("");
+		label.setOpaque(true);
+		label.setBackground(new Color(215, 25, 28, 100));
+		eastPanel.add(label);
 
+		policyStatusPanel.add(eastPanel, BorderLayout.EAST);
+		policyStatusPanel.add(centerPanel, BorderLayout.CENTER);
 		filterPanel.add(policyStatusPanel);
 
 		JPanel activityFlagPanel = new JPanel();
