@@ -15,6 +15,7 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoURI;
@@ -131,8 +132,6 @@ public class DataControllerTest {
 		key.append("facility", true);
 		key.append("location", true);
 
-		DataController mongolabDataController = new DataController(new Mongo(new MongoURI("mongodb://fulgura:Diego80911@ds035127.mongolab.com:35127/vast")), "vast", "region");
-
 		DB db = dataController.getDB("vast");
 		
 		if(db.collectionExists("region")){
@@ -173,9 +172,12 @@ public class DataControllerTest {
 	
 	@Test
 	public void testFilterRegions() throws Exception {
-		
 		DataController machineDataController = new DataController(new Mongo("localhost:27022"), "vast", "region");
-		System.out.println(machineDataController.find(QueryBuilder.start().get()).count());
+		DBCursor cursor = machineDataController.find(QueryBuilder.start().get());
+		
+		for (DBObject dbObject : cursor) {
+			System.out.println(dbObject);
+		}
 	}
 	
 	@Test

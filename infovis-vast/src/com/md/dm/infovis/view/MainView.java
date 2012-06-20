@@ -34,7 +34,9 @@ import javax.swing.tree.TreePath;
 import com.md.dm.infovis.vast.controller.DataController;
 import com.md.dm.infovis.vast.controller.MapKitController;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.Mongo;
 import com.mongodb.QueryBuilder;
 
 public class MainView extends JPanel {
@@ -56,6 +58,7 @@ public class MainView extends JPanel {
 	private Checkbox deviceAdded;
 	private ArrayList<Checkbox> machineFunctionList;
 	private ArrayList<Checkbox> machineClassList;
+	private DataController machineDataController;
 
 	public MainView() {
 		initComponents();
@@ -65,6 +68,7 @@ public class MainView extends JPanel {
 	private void afertInitComponents() {
 		try {
 			dataController = new DataController();
+			machineDataController = new DataController(new Mongo("localhost:27022"), "vast", "region");
 			policyCheckboxMap = new HashMap<Checkbox, Integer>();
 			policyCheckboxMap.put(healthy, 1);
 			policyCheckboxMap.put(moderate, 2);
@@ -147,7 +151,7 @@ public class MainView extends JPanel {
 		centerPanel.add(infected);
 		
 		JPanel eastPanel = new JPanel(new GridLayout(5, 0));
-		JLabel label = new JLabel("  ");
+		JLabel label = new JLabel("   ");
 		label.setOpaque(true);
 		label.setBackground(new Color(26, 150, 65, 100));
 		eastPanel.add(label);
@@ -394,8 +398,9 @@ public class MainView extends JPanel {
 		}
 		
 		System.out.println(qb.get());
-		DBObject group = dataController.group(key, qb.get());
-		mapKitController.showData(group);
+		
+		DBCursor filter = machineDataController.filter(qb.get());
+		mapKitController.showData(filter);
 	}
 
 }

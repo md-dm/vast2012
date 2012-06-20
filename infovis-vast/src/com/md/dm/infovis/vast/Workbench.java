@@ -18,7 +18,6 @@ import javax.swing.KeyStroke;
 
 import com.md.dm.infovis.vast.controller.DataController;
 import com.md.dm.infovis.view.MainView;
-import com.md.dm.infovis.view.ParallelCoordView;
 
 /**
  * @author diego
@@ -41,7 +40,6 @@ public class Workbench extends JFrame implements ActionListener {
 		// Set up the GUI.
 		desktop = new JDesktopPane(); // a specialized layered pane
 		createMainFrame(); // create first "window"
-		createParallelFrame();
 		setContentPane(desktop);
 		setJMenuBar(createMenuBar());
 		
@@ -49,6 +47,7 @@ public class Workbench extends JFrame implements ActionListener {
 
 		// Make dragging a little faster but perhaps uglier.
 		desktop.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
+		this.setExtendedState(MAXIMIZED_BOTH);
 	}
 
 	protected JMenuBar createMenuBar() {
@@ -93,18 +92,10 @@ public class Workbench extends JFrame implements ActionListener {
 		InternalViewer frame = new InternalViewer(new MainView());
 		frame.setVisible(true); // necessary as of 1.3
 		desktop.add(frame);
+		
 		try {
 			frame.setSelected(true);
-		} catch (java.beans.PropertyVetoException e) {
-		}
-	}	
-
-	protected void createParallelFrame() {
-		InternalViewer frame = new InternalViewer(new ParallelCoordView());
-		frame.setVisible(true); // necessary as of 1.3
-		desktop.add(frame);
-		try {
-			frame.setSelected(true);
+			frame.setMaximum(true);
 		} catch (java.beans.PropertyVetoException e) {
 		}
 	}	

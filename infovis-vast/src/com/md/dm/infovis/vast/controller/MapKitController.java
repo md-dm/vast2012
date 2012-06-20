@@ -64,9 +64,19 @@ public class MapKitController {
 		compoundPainter.setCacheable(false);
 
 		this.setOverlayPainter(compoundPainter);
-		
 	}
+	
+	public void showData(DBCursor cursor){
+		
+		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
+				new PieChartWaypontPainter(cursor), new PolygonPainter());
+		
+		compoundPainter.setCacheable(false);
 
+		this.setOverlayPainter(compoundPainter);
+	}
+		
+		
 	public void addWaypoints() {
 
 	}
