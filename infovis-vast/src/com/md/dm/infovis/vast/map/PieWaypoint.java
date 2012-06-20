@@ -44,6 +44,35 @@ public class PieWaypoint extends Waypoint {
 						new Slice((Double) dbObject.get("policyStatus5"),
 								new Color(215, 25, 28, 100)) });
 	}
+	
+	public String getLabel() {
+		String bussinedUnit = (String)dbObject.get("bussinesUnit");
+		String shortBU = "";
+		if(bussinedUnit.equals("headquarters")){
+			shortBU = "hq";
+		}else{
+			shortBU = "rg";
+			String[] split = bussinedUnit.split("-");
+			if(split.length > 1){
+				shortBU += split[1];
+			}
+		}
+		String facility = (String)dbObject.get("facility");
+		String shortFa = "";
+		if(facility.startsWith("datacenter")){
+			shortFa = "dc";
+			String[] split = facility.split("-");
+			if(split.length > 1){
+				shortFa += split[1];
+			}
+		}else{
+			shortFa = "br";
+			String substring = facility.substring(6);
+			shortFa += substring;
+		}
+
+		return shortBU + "-" + shortFa;
+	}
 
 	@Override
 	public GeoPosition getPosition() {
