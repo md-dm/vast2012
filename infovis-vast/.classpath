@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="lib/mongo-2.7.2.jar" sourcepath="/home/diego/mongodb-mongo-java-driver-0da01d1/mongo-java-driver-2.7.2-sources.jar"/>
 	<classpathentry kind="lib" path="lib/swingx-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/swingx-beaninfo-1.6.jar"/>
-	<classpathentry kind="lib" path="lib/swingx-ws-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/swingx-ws-1.0.jar" sourcepath="/Users/diego/.m2/repository/org/swinglabs/swingx-ws/1.0/swingx-ws-1.0-sources.jar"/>
 	<classpathentry kind="lib" path="lib/lablib-checkboxtree-3.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="classes"/>
