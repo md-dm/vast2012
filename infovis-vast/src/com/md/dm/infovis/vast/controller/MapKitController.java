@@ -42,8 +42,7 @@ public class MapKitController {
 		mapKit.setAddressLocationShown(true);
 		mapKit.setCenterPosition(new GeoPosition(45, -90));
 		// jXMapKit.setAddressLocation(new GeoPosition(1, 1));
-
-		mapKit.setZoom(8);
+		mapKit.setZoom(15);
 //		((DefaultTileFactory) mapKit.getMainMap().getTileFactory())
 //				.setThreadPoolSize(8);
 //
