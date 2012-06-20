@@ -3,6 +3,7 @@ package com.md.dm.infovis.vast.controller;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import junit.framework.Assert;
 
@@ -16,6 +17,7 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
+import com.mongodb.MongoURI;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteConcern;
 
@@ -129,6 +131,8 @@ public class DataControllerTest {
 		key.append("facility", true);
 		key.append("location", true);
 
+		DataController mongolabDataController = new DataController(new Mongo(new MongoURI("mongodb://fulgura:Diego80911@ds035127.mongolab.com:35127/vast")), "vast", "region");
+
 		DB db = dataController.getDB("vast");
 		
 		if(db.collectionExists("region")){
@@ -172,6 +176,51 @@ public class DataControllerTest {
 		
 		DataController machineDataController = new DataController(new Mongo("localhost:27022"), "vast", "region");
 		System.out.println(machineDataController.find(QueryBuilder.start().get()).count());
+	}
+	
+	@Test
+	public void testConnectRemote() throws Exception {
+		BasicDBObject key = new BasicDBObject();
+		key.append("bussinesUnit", true);
+		key.append("facility", true);
+		key.append("location", true);
+
+		DB db = dataController.getDB("vast");
+		
+		if(db.collectionExists("region")){
+			DBCollection collection = db.getCollection("region");
+			collection.drop();
+		}
+		
+		
+		QueryBuilder qb = new QueryBuilder();
+		//qb.put("statusList").notEquals(new ArrayList());
+		DBObject group = dataController.group(key, qb.get());
+
+		DBCollection region = db.createCollection("region", null);
+		
+		BasicDBList basicDBList = (BasicDBList) group;
+		for (Object object : basicDBList) {
+			region.insert((DBObject)object);
+		}
+		
+		region.ensureIndex(new BasicDBObject("bussinesUnit", 1).append("facility", 1));
+		region.ensureIndex(new BasicDBObject("bussinesUnit", 1));
+		region.ensureIndex(new BasicDBObject("facility", 1));
+		region.ensureIndex(new BasicDBObject("location", "2d"));
+		region.ensureIndex(new BasicDBObject("policyStatus1", 1));
+		region.ensureIndex(new BasicDBObject("policyStatus2", 1));
+		region.ensureIndex(new BasicDBObject("policyStatus3", 1));
+		region.ensureIndex(new BasicDBObject("policyStatus4", 1));
+		region.ensureIndex(new BasicDBObject("policyStatus5", 1));
+		region.ensureIndex(new BasicDBObject("activityFlag1", 1));
+		region.ensureIndex(new BasicDBObject("activityFlag2", 1));
+		region.ensureIndex(new BasicDBObject("activityFlag3", 1));
+		region.ensureIndex(new BasicDBObject("activityFlag4", 1));
+		region.ensureIndex(new BasicDBObject("activityFlag5", 1));
+		
+		System.out.println(region.count());
+		
 	}
 
 }
