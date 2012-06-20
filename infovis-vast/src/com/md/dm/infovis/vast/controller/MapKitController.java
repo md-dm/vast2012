@@ -56,8 +56,8 @@ public class MapKitController {
 			}
 		};
 
-		// mapKit.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
-		mapKit.setTileFactory(new EmptyTileFactory());
+		mapKit.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
+		//mapKit.setTileFactory(new EmptyTileFactory());
 		// mapKit.setTileFactory(new DefaultTileFactory(info));
 
 		mapKit.setAddressLocationShown(true);
@@ -67,8 +67,8 @@ public class MapKitController {
 		mapKit.setZoomSliderVisible(true);
 		mapKit.setZoomButtonsVisible(true);
 		mapKit.setAddressLocationShown(true);
-		mapKit.getMainMap().setDrawTileBorders(true);
-		mapKit.getMainMap().setHorizontalWrapped(true);
+		//mapKit.getMainMap().setDrawTileBorders(true);
+		//mapKit.getMainMap().setHorizontalWrapped(true);
 		mapKit.getMainMap().setRecenterOnClickEnabled(true);
 		mapKit.getMainMap().setRestrictOutsidePanning(true);
 		mapKit.getMainMap().setPanEnabled(true);
