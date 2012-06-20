@@ -16,12 +16,12 @@ public class ParallelCoordView extends JPanel {
 	}
 
 	private void initComponents() {
-		 DataModel dataModel = new CSVDataModel("resources/meta.csv");
-		 HistogramPlotModel model = new HistogramPlotModel(dataModel);
-	     JasplotPanel jasplot = new JasplotPanel(model);
-
-	     setLayout(new BorderLayout());
-	     add(jasplot, BorderLayout.CENTER);
+//		 DataModel dataModel = new CSVDataModel("resources/meta.csv");
+//		 HistogramPlotModel model = new HistogramPlotModel(dataModel);
+//	     JasplotPanel jasplot = new JasplotPanel(model);
+//
+//	     setLayout(new BorderLayout());
+//	     add(jasplot, BorderLayout.CENTER);
 	}
 
 }
