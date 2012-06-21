@@ -51,7 +51,6 @@ public class PolygonPainter implements Painter<JXMapViewer> {
 		g = (Graphics2D) g.create();
 		// convert from viewport to world bitmap
 		Rectangle rect = map.getViewportBounds();
-		System.out.println(rect);
 		g.translate(-rect.x, -rect.y);
 
 		// create a polygon
