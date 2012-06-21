@@ -156,19 +156,19 @@ public class MainView extends JPanel {
 		label.setOpaque(true);
 		label.setBackground(new Color(26, 150, 65, 100));
 		eastPanel.add(label);
-		label = new JLabel("");
+		label = new JLabel("   ");
 		label.setOpaque(true);
 		label.setBackground(new Color(166, 217, 106, 100));
 		eastPanel.add(label);
-		label = new JLabel("");
+		label = new JLabel("   ");
 		label.setOpaque(true);
 		label.setBackground(new Color(255, 255, 191, 100));
 		eastPanel.add(label);
-		label = new JLabel("");
+		label = new JLabel("   ");
 		label.setOpaque(true);
 		label.setBackground(new Color(253, 174, 97, 100));
 		eastPanel.add(label);
-		label = new JLabel("");
+		label = new JLabel("   ");
 		label.setOpaque(true);
 		label.setBackground(new Color(215, 25, 28, 100));
 		eastPanel.add(label);
@@ -198,19 +198,19 @@ public class MainView extends JPanel {
 		label.setOpaque(true);
 		label.setBackground(new Color(27, 158, 119, 100));
 		eastPanel.add(label);
-		label = new JLabel("");
+		label = new JLabel("   ");
 		label.setOpaque(true);
 		label.setBackground(new Color(217, 95, 2, 100));
 		eastPanel.add(label);
-		label = new JLabel("");
+		label = new JLabel("   ");
 		label.setOpaque(true);
 		label.setBackground(new Color(117, 112, 179, 100));
 		eastPanel.add(label);
-		label = new JLabel("");
+		label = new JLabel("   ");
 		label.setOpaque(true);
 		label.setBackground(new Color(231, 41, 138, 100));
 		eastPanel.add(label);
-		label = new JLabel("");
+		label = new JLabel("   ");
 		label.setOpaque(true);
 		label.setBackground(new Color(102, 166, 30, 100));
 		eastPanel.add(label);
@@ -361,7 +361,6 @@ public class MainView extends JPanel {
 			boolean checked = checkingModel.isPathChecked(checkingPaths[i]);
 			if (checked) {
 				System.out.println(checkingPaths[i] + " " + checked);
-
 				if (checkingPaths[i].getPathCount() > 1) {
 
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode) checkingPaths[i]
