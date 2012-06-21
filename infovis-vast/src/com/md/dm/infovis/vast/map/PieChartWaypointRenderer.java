@@ -71,7 +71,7 @@ public class PieChartWaypointRenderer implements WaypointRenderer {
 
 		if (zoom <= 10) {
 			g.setColor(Color.DARK_GRAY);
-			g.drawString(label, -1 * width / 2, height / 2 + g.getFontMetrics().getHeight());
+			g.drawString(label + "-#" + (int)total, -1 * width / 2, height / 2 + g.getFontMetrics().getHeight());
 		}
 	}
 
