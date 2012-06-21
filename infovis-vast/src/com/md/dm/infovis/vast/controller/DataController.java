@@ -1,5 +1,7 @@
 package com.md.dm.infovis.vast.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class DataController {
 
 	private Mongo mongo;
 	private DB db;
+	private String groupFunction;
 
 	private DBCollection collection;
 
@@ -33,11 +36,13 @@ public class DataController {
 	}
 
 	public DataController(Mongo mongo, String databaseName,
-			String collectionName) {
+			String collectionName) throws Exception {
 		super();
 		this.mongo = mongo;
 		this.db = mongo.getDB(databaseName);
 		this.collection = db.getCollection(collectionName);
+		this.groupFunction = this
+				.readFileAsString("com/md/dm/infovis/vast/controller/group.js");
 	}
 
 	/**
@@ -303,6 +308,7 @@ public class DataController {
 		return collection.find(query);
 
 	}
+
 	public DBCursor filter(DBObject query) {
 		return collection.find(query);
 	}
@@ -321,17 +327,17 @@ public class DataController {
 		initial.append("activityFlag3", 0);
 		initial.append("activityFlag4", 0);
 		initial.append("activityFlag5", 0);
-		//initial.append("ipAddr", new ArrayList());
-		
+//		initial.append("atm", 0);
+//		initial.append("server", 0);
+//		initial.append("workstation", 0);
+		// initial.append("ipAddr", new ArrayList());
 
-//		DBObject dbObject = collection.group(key, cond, initial,
-//				"function(doc, prev) { prev.count += 1; prev.ipAddr.push(doc.ipAddr); }");
 		DBObject dbObject = collection.group(key, cond, initial,
-				"function(doc, prev) { prev.count += 1; if(doc.statusList.length == 0) return; switch(doc.statusList[0].policyStatus) { case 1: prev.policyStatus1 += 1; break; case 2: prev.policyStatus2 += 1; break; case 3: prev.policyStatus3 += 1; break;case 4: prev.policyStatus4 += 1; break;case 5: prev.policyStatus5 += 1; break;} switch(doc.statusList[0].activityFlag) { case 1: prev.activityFlag1 += 1; break; case 2: prev.activityFlag2 += 1; break; case 3: prev.activityFlag3 += 1; break;case 4: prev.activityFlag4 += 1; break;case 5: prev.activityFlag5 += 1; break;}}");
-		
-		
+				this.groupFunction);
+
 		return dbObject;
 	}
+
 	/**
 	 * //dataController.filterBy("bussinesUnit:'region-1', facility:'branch1'}")
 	 * 
@@ -351,7 +357,7 @@ public class DataController {
 		cond.append("facility", facility);
 		// Filter non empty statusList
 		cond.append("statusList", new BasicDBObject("$ne", new ArrayList()));
-		//cond.append("statusList.policyStatus", 1);
+		// cond.append("statusList.policyStatus", 1);
 
 		BasicDBObject initial = new BasicDBObject();
 		initial.append("count", 0);
@@ -365,16 +371,32 @@ public class DataController {
 		initial.append("activityFlag3", 0);
 		initial.append("activityFlag4", 0);
 		initial.append("activityFlag5", 0);
-		//initial.append("ipAddr", new ArrayList());
-		
+		// initial.append("ipAddr", new ArrayList());
 
-//		DBObject dbObject = collection.group(key, cond, initial,
-//				"function(doc, prev) { prev.count += 1; prev.ipAddr.push(doc.ipAddr); }");
 		DBObject dbObject = collection.group(key, cond, initial,
-				"function(doc, prev) { prev.count += 1; if(doc.statusList.length == 0) return;  switch(doc.statusList[0].policyStatus) { case 1: prev.policyStatus1 += 1; break; case 2: prev.policyStatus2 += 1; break; case 3: prev.policyStatus3 += 1; break;case 4: prev.policyStatus4 += 1; break;case 5: prev.policyStatus5 += 1; break;} switch(doc.statusList[0].activityFlag) { case 1: prev.activityFlag1 += 1; break; case 2: prev.activityFlag2 += 1; break; case 3: prev.activityFlag3 += 1; break;case 4: prev.activityFlag4 += 1; break;case 5: prev.activityFlag5 += 1; break;}}");
-		
-		
+				this.groupFunction);
+
 		return dbObject;
+	}
+
+	/**
+	 * @param filePath
+	 *            name of file to open. The file can reside anywhere in the
+	 *            classpath
+	 */
+	private String readFileAsString(String filePath) throws java.io.IOException {
+		StringBuffer fileData = new StringBuffer(1000);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(this
+				.getClass().getClassLoader().getResourceAsStream(filePath)));
+		char[] buf = new char[1024];
+		int numRead = 0;
+		while ((numRead = reader.read(buf)) != -1) {
+			String readData = String.valueOf(buf, 0, numRead);
+			fileData.append(readData);
+			buf = new char[1024];
+		}
+		reader.close();
+		return fileData.toString();
 	}
 
 }
