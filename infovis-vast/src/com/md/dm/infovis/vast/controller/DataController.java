@@ -327,9 +327,20 @@ public class DataController {
 		initial.append("activityFlag3", 0);
 		initial.append("activityFlag4", 0);
 		initial.append("activityFlag5", 0);
-//		initial.append("atm", 0);
-//		initial.append("server", 0);
-//		initial.append("workstation", 0);
+		initial.append("atm", 0);
+		initial.append("server", 0);
+		initial.append("workstation", 0);
+
+		initial.append("empty", 0);
+		initial.append("compute", 0);
+		initial.append("email", 0);
+		initial.append("fileserver", 0);
+		initial.append("loan", 0);
+		initial.append("multiple", 0);
+		initial.append("office", 0);
+		initial.append("teller", 0);
+		initial.append("web", 0);
+
 		// initial.append("ipAddr", new ArrayList());
 
 		DBObject dbObject = collection.group(key, cond, initial,
@@ -371,7 +382,19 @@ public class DataController {
 		initial.append("activityFlag3", 0);
 		initial.append("activityFlag4", 0);
 		initial.append("activityFlag5", 0);
-		// initial.append("ipAddr", new ArrayList());
+		initial.append("atm", 0);
+		initial.append("server", 0);
+		initial.append("workstation", 0);
+
+		initial.append("empty", 0);
+		initial.append("compute", 0);
+		initial.append("email", 0);
+		initial.append("fileserver", 0);
+		initial.append("loan", 0);
+		initial.append("multiple", 0);
+		initial.append("office", 0);
+		initial.append("teller", 0);
+		initial.append("web", 0);
 
 		DBObject dbObject = collection.group(key, cond, initial,
 				this.groupFunction);
