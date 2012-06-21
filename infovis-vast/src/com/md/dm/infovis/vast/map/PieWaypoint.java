@@ -20,10 +20,12 @@ import com.mongodb.DBObject;
 public class PieWaypoint extends Waypoint {
 
 	private DBObject dbObject;
+	private String pieType;
 
-	public PieWaypoint(DBObject dbObject) {
+	public PieWaypoint(DBObject dbObject, String pieType) {
 		super();
 		this.dbObject = dbObject;
+		this.pieType = pieType;
 	}
 
 	public DBObject getDbObject() {
@@ -31,41 +33,53 @@ public class PieWaypoint extends Waypoint {
 	}
 
 	public List<Slice> getSlices() {
-		return Arrays
-				.asList(new Slice[] {
-						new Slice((Double) dbObject.get("policyStatus1"),
-								new Color(26, 150, 65, 100)),
-						new Slice((Double) dbObject.get("policyStatus2"),
-								new Color(166, 217, 106, 100)),
-						new Slice((Double) dbObject.get("policyStatus3"),
-								new Color(255, 255, 191, 100)),
-						new Slice((Double) dbObject.get("policyStatus4"),
-								new Color(253, 174, 97, 100)),
-						new Slice((Double) dbObject.get("policyStatus5"),
-								new Color(215, 25, 28, 100)) });
+		if (pieType.startsWith("PolicyStatus")) {
+			return Arrays.asList(new Slice[] {
+					new Slice((Double) dbObject.get("policyStatus1"),
+							new Color(26, 150, 65, 100)),
+					new Slice((Double) dbObject.get("policyStatus2"),
+							new Color(166, 217, 106, 100)),
+					new Slice((Double) dbObject.get("policyStatus3"),
+							new Color(255, 255, 191, 100)),
+					new Slice((Double) dbObject.get("policyStatus4"),
+							new Color(253, 174, 97, 100)),
+					new Slice((Double) dbObject.get("policyStatus5"),
+							new Color(215, 25, 28, 100)) });
+		}
+		return Arrays.asList(new Slice[] {
+				new Slice((Double) dbObject.get("activityFlag1"),
+						new Color(27, 158, 119, 100)),
+				new Slice((Double) dbObject.get("activityFlag2"),
+						new Color(217, 95, 2, 100)),
+				new Slice((Double) dbObject.get("activityFlag3"),
+						new Color(117, 112, 179, 100)),
+				new Slice((Double) dbObject.get("activityFlag4"),
+						new Color(231, 41, 138, 100)),
+				new Slice((Double) dbObject.get("activityFlag5"),
+						new Color(102, 166, 30, 100)) });	
 	}
-	
+
 	public String getLabel() {
-		String bussinedUnit = (String)dbObject.get("bussinesUnit");
+		String bussinedUnit = (String) dbObject.get("bussinesUnit");
 		String shortBU = "";
-		if(bussinedUnit.equals("headquarters")){
+		if (bussinedUnit.equals("headquarters")) {
 			shortBU = "hq";
-		}else{
+		} else {
 			shortBU = "rg";
 			String[] split = bussinedUnit.split("-");
-			if(split.length > 1){
+			if (split.length > 1) {
 				shortBU += split[1];
 			}
 		}
-		String facility = (String)dbObject.get("facility");
+		String facility = (String) dbObject.get("facility");
 		String shortFa = "";
-		if(facility.startsWith("datacenter")){
+		if (facility.startsWith("datacenter")) {
 			shortFa = "dc";
 			String[] split = facility.split("-");
-			if(split.length > 1){
+			if (split.length > 1) {
 				shortFa += split[1];
 			}
-		}else{
+		} else {
 			shortFa = "br";
 			String substring = facility.substring(6);
 			shortFa += substring;

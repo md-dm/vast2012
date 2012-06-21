@@ -59,6 +59,7 @@ public class MainView extends JPanel {
 	private ArrayList<Checkbox> machineFunctionList;
 	private ArrayList<Checkbox> machineClassList;
 	private DataController machineDataController;
+	private JComboBox chartComboBox;
 
 	public MainView() {
 		initComponents();
@@ -151,7 +152,7 @@ public class MainView extends JPanel {
 		centerPanel.add(infected);
 		
 		JPanel eastPanel = new JPanel(new GridLayout(5, 0));
-		JLabel label = new JLabel("   ");
+		JLabel label = new JLabel("  ");
 		label.setOpaque(true);
 		label.setBackground(new Color(26, 150, 65, 100));
 		eastPanel.add(label);
@@ -178,19 +179,44 @@ public class MainView extends JPanel {
 
 		JPanel activityFlagPanel = new JPanel();
 		activityFlagPanel.setBorder(new TitledBorder("Activity Flag"));
-		activityFlagPanel.setLayout(new GridLayout(5, 0));
+		activityFlagPanel.setLayout(new BorderLayout());
+		centerPanel = new JPanel(new GridLayout(5, 0));
 		normal = new Checkbox("Normal");
 		goingDown = new Checkbox("Going down");
 		invalidLogin = new Checkbox("5 invalid login");
 		fullyConsumed = new Checkbox("CPU fully consumed");
 		deviceAdded = new Checkbox("Device added");
 
-		activityFlagPanel.add(normal);
-		activityFlagPanel.add(goingDown);
-		activityFlagPanel.add(invalidLogin);
-		activityFlagPanel.add(fullyConsumed);
-		activityFlagPanel.add(deviceAdded);
+		centerPanel.add(normal);
+		centerPanel.add(goingDown);
+		centerPanel.add(invalidLogin);
+		centerPanel.add(fullyConsumed);
+		centerPanel.add(deviceAdded);
 
+		eastPanel = new JPanel(new GridLayout(5, 0));
+		label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(27, 158, 119, 100));
+		eastPanel.add(label);
+		label = new JLabel("");
+		label.setOpaque(true);
+		label.setBackground(new Color(217, 95, 2, 100));
+		eastPanel.add(label);
+		label = new JLabel("");
+		label.setOpaque(true);
+		label.setBackground(new Color(117, 112, 179, 100));
+		eastPanel.add(label);
+		label = new JLabel("");
+		label.setOpaque(true);
+		label.setBackground(new Color(231, 41, 138, 100));
+		eastPanel.add(label);
+		label = new JLabel("");
+		label.setOpaque(true);
+		label.setBackground(new Color(102, 166, 30, 100));
+		eastPanel.add(label);
+
+		activityFlagPanel.add(eastPanel, BorderLayout.EAST);
+		activityFlagPanel.add(centerPanel, BorderLayout.CENTER);
 		filterPanel.add(activityFlagPanel);
 
 		JPanel machineClassPanel = new JPanel();
@@ -236,6 +262,15 @@ public class MainView extends JPanel {
 		numConnectionsPanel.add(numConnectionsComboBox);
 
 		filterPanel.add(numConnectionsPanel);
+
+		JPanel chartPanel = new JPanel();
+		chartPanel.setBorder(new TitledBorder("Chart"));
+		chartPanel.setLayout(new GridLayout(1, 1));
+		String[] types = { "PolicyStatus-Pie", "ActivityFlag-Pie" };
+		chartComboBox = new JComboBox(types);
+		chartPanel.add(chartComboBox);
+
+		filterPanel.add(chartPanel);
 
 		return filterPanel;
 	}
@@ -399,8 +434,9 @@ public class MainView extends JPanel {
 		
 		System.out.println(qb.get());
 		
-		DBCursor filter = machineDataController.filter(qb.get());
-		mapKitController.showData(filter);
+		DBObject group = this.dataController.group(key, qb.get());
+		//DBCursor filter = machineDataController.filter(qb.get());
+		mapKitController.showData(group, (String)chartComboBox.getSelectedItem());
 	}
 
 }

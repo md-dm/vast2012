@@ -11,11 +11,14 @@ import org.jdesktop.swingx.mapviewer.TileFactoryInfo;
 import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.Painter;
 
+import com.md.dm.infovis.vast.map.EmptyTileFactory;
 import com.md.dm.infovis.vast.map.HoverLabelManager;
 import com.md.dm.infovis.vast.map.PieChartWaypontPainter;
 import com.md.dm.infovis.vast.map.PolygonPainter;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.Mongo;
+import com.mongodb.QueryBuilder;
 
 public class MapKitController {
 
@@ -54,7 +57,7 @@ public class MapKitController {
 		};
 
 		mapKit.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
-		// mapKit.setTileFactory(new EmptyTileFactory());
+		//mapKit.setTileFactory(new EmptyTileFactory());
 		// mapKit.setTileFactory(new DefaultTileFactory(info));
 
 		mapKit.setAddressLocationShown(true);
@@ -64,8 +67,8 @@ public class MapKitController {
 		mapKit.setZoomSliderVisible(true);
 		mapKit.setZoomButtonsVisible(true);
 		mapKit.setAddressLocationShown(true);
-		// mapKit.getMainMap().setDrawTileBorders(true);
-		// mapKit.getMainMap().setHorizontalWrapped(true);
+		//mapKit.getMainMap().setDrawTileBorders(true);
+		//mapKit.getMainMap().setHorizontalWrapped(true);
 		mapKit.getMainMap().setRecenterOnClickEnabled(true);
 		mapKit.getMainMap().setRestrictOutsidePanning(true);
 		mapKit.getMainMap().setPanEnabled(true);
@@ -74,34 +77,58 @@ public class MapKitController {
 		hoverLabelManager = new HoverLabelManager(mapKit);
 		mapKit.getMainMap().addMouseMotionListener(hoverLabelManager);
 
+
+		DataController machineDataController = new DataController(new Mongo("localhost:27022"), "vast", "region");
+		DBCursor cursor = machineDataController.find(QueryBuilder.start().get());
+		//hoverLabelManager
+
+		// ((DefaultTileFactory) mapKit.getMainMap().getTileFactory())
+		// .setThreadPoolSize(8);
+		//
+		// CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
+		// new PieChartWaypontPainter(dataController.filter("region-1",
+		// "branch1")), new PolygonPainter());
+		//
+		// compoundPainter.setCacheable(false);
+		//
+		//
+		//
+		// this.setOverlayPainter(compoundPainter);
 		mapKit.setCenterPosition(new GeoPosition(45, -90));
+		// jXMapKit.setAddressLocation(new GeoPosition(1, 1));
 		mapKit.setZoom(15);
+//		((DefaultTileFactory) mapKit.getMainMap().getTileFactory())
+//				.setThreadPoolSize(8);
+//
+//		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
+//				new PieChartWaypontPainter(dataController.filter("region-1", "branch1")), new PolygonPainter());
+//		
+//		compoundPainter.setCacheable(false);
+//
+//		
+//		
+//		this.setOverlayPainter(compoundPainter);
 	}
 
-	public void showData(DBObject dBObject) {
-		PieChartWaypontPainter pieChartWaypontPainter = new PieChartWaypontPainter(dBObject);
-		hoverLabelManager.setPieChartWaypontPainter(pieChartWaypontPainter);
-
-		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(pieChartWaypontPainter,
-				new PolygonPainter());
+	public void showData(DBObject dBObject, String pieType) {
+		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
+				new PieChartWaypontPainter(dBObject, pieType), new PolygonPainter());
 
 		compoundPainter.setCacheable(false);
 
 		this.setOverlayPainter(compoundPainter);
 	}
 
-	public void showData(DBCursor cursor) {
+	public void showData(DBCursor cursor, String pieType){
 
-		PieChartWaypontPainter pieChartWaypontPainter = new PieChartWaypontPainter(cursor);
-		hoverLabelManager.setPieChartWaypontPainter(pieChartWaypontPainter);
-
-		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(pieChartWaypontPainter,
-				new PolygonPainter());
+		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
+				new PieChartWaypontPainter(cursor, pieType), new PolygonPainter());
 
 		compoundPainter.setCacheable(false);
 
 		this.setOverlayPainter(compoundPainter);
 	}
+
 
 	public void addWaypoints() {
 
