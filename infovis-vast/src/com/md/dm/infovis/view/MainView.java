@@ -434,8 +434,9 @@ public class MainView extends JPanel {
 		
 		System.out.println(qb.get());
 		
-		DBCursor filter = machineDataController.filter(qb.get());
-		mapKitController.showData(filter, (String)chartComboBox.getSelectedItem());
+		DBObject group = this.dataController.group(key, qb.get());
+		//DBCursor filter = machineDataController.filter(qb.get());
+		mapKitController.showData(group, (String)chartComboBox.getSelectedItem());
 	}
 
 }
