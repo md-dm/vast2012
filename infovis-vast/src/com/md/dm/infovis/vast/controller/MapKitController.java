@@ -111,8 +111,11 @@ public class MapKitController {
 	}
 
 	public void showData(DBObject dBObject, String pieType) {
+		PieChartWaypontPainter pieChartWaypontPainter = new PieChartWaypontPainter(dBObject, pieType);
+		hoverLabelManager.setPieChartWaypontPainter(pieChartWaypontPainter);
+		
 		CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter(
-				new PieChartWaypontPainter(dBObject, pieType), new PolygonPainter());
+				pieChartWaypontPainter, new PolygonPainter());
 
 		compoundPainter.setCacheable(false);
 
