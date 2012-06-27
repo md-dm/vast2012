@@ -6,6 +6,9 @@ package com.md.dm.vi.vast;
 import java.io.FileInputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.inject.Inject;
@@ -241,9 +244,17 @@ public class VastApp {
 				}
 				// find
 				Query query = new Query(Criteria.where("ipAddr").is(data[1].trim()));
+				List<Machine> find = mongoOperations.find(query, Machine.class);
+				Double longitude = find.get(0).getLocation()[1];
+				int offset = (int) (Math.floor(Math.floor(Math.abs(Math.round(longitude * 1000000.))/1000000) / 15) * -1);
+				Date healthTime = formatter.parse(data[2].trim());
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(healthTime);
+				calendar.add(Calendar.HOUR, offset);
+				Date fixedDate = calendar.getTime();
 				Status status = new Status(Long.parseLong(data[0]),
-						formatter.parse(data[2].trim()), Integer.parseInt(data[3]),
-						Integer.parseInt(data[4]), Integer.parseInt(data[5]));
+						healthTime, Integer.parseInt(data[3]),
+						Integer.parseInt(data[4]), Integer.parseInt(data[5]), fixedDate);
 				System.out.println(status);
 				mongoOperations.findAndModify(query, new Update().push("statusList", status),
 						Machine.class);
