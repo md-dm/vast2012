@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.mapviewer.Waypoint;
 
 import com.mongodb.DBObject;
@@ -103,6 +104,7 @@ public class HoverLabelManager implements MouseMotionListener {
 		for (Waypoint waypoint : waypoints) {
 
 			PieWaypoint pieWaypoint = (PieWaypoint) waypoint;
+			System.out.println(this.contains(pieWaypoint.getPosition(), e));
 
 			Point2D gp_pt = map.getTileFactory().geoToPixel(pieWaypoint.getPosition(),
 					map.getZoom());
@@ -111,30 +113,26 @@ public class HoverLabelManager implements MouseMotionListener {
 
 				Point converted_gp_pt = new Point((int) gp_pt.getX() - rect.x, (int) gp_pt.getY()
 						- rect.y);
-				// System.out.println("Rect= " + rect + "------>Point:" +
-				// e.getPoint() + "-->Region:"
-				// + pieWaypoint.getLabel() + "==" + converted_gp_pt);
+
+				// System.out.println("Distancia: " + (int)
+				// e.getPoint().distance(gp_pt)
+				// + " | evento(" + (int) e.getX() + ", " + (int) e.getY() + ")"
+				// + "geo("
+				// + (int) gp_pt.getX() + ", " + (int) gp_pt.getY() +
+				// ") -- rect:[ ("
+				// + (int) rect.getX() + ", " + (int) rect.getY() + ")-w:"
+				// + (int) rect.getWidth() + ", h:" + (int) rect.getHeight() +
+				// "] -  -"
+				// + converted_gp_pt);
 
 				// check if near the mouse
 				if (converted_gp_pt.distance(e.getPoint()) < 10) {
-					System.out.println("Match!!!!");
+					// System.out.println("Match!!!!");
 
 					DBObject dbObject = pieWaypoint.getDbObject();
-					StringBuffer buffer = new StringBuffer();
-					buffer.append("<html>");
-					buffer.append("<b>bussinesUnit: </b>");
-					buffer.append(dbObject.get("bussinesUnit"));
-					buffer.append("<BR />");
-					buffer.append("<b>facility: </b>");
-					buffer.append(dbObject.get("facility"));
-					buffer.append("<BR />");
-					buffer.append("</html>");
-
-					hoverPanel.getDetailLabel().setText(buffer.toString());
-
+					hoverPanel.setDBObject(dbObject);
 					hoverPanel.setLocation(converted_gp_pt);
 					hoverPanel.setVisible(true);
-
 				} else {
 					hoverPanel.setVisible(false);
 				}
@@ -142,5 +140,20 @@ public class HoverLabelManager implements MouseMotionListener {
 
 		}
 
+	}
+
+	public boolean contains(GeoPosition gp, MouseEvent e) {
+		JXMapViewer map = mapKit.getMainMap();
+		// convert to world bitmap
+		Point2D gp_pt = map.getTileFactory().geoToPixel(gp, map.getZoom());
+		// convert to screen
+		Rectangle rect = map.getViewportBounds();
+		Point converted_gp_pt = new Point((int) gp_pt.getX() - rect.x, (int) gp_pt.getY() - rect.y);
+		// check if near the mouse
+		if (converted_gp_pt.distance(e.getPoint()) < 10) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
