@@ -16,14 +16,24 @@ public class Status {
 	private int numConnections;
 	private int policyStatus;
 	private int activityFlag;
+	private Date fixedHealthTime;
 
-	public Status(long tkey, Date healthTime, int numConnections, int policyStatus, int activityFlag) {
+	public Status(long tkey, Date healthTime, int numConnections, int policyStatus, int activityFlag, Date fixedHealthTime) {
 		super();
 		this.tkey = tkey;
 		this.healthTime = healthTime;
 		this.numConnections = numConnections;
 		this.policyStatus = policyStatus;
 		this.activityFlag = activityFlag;
+		this.fixedHealthTime = fixedHealthTime;
+	}
+
+	public Date getFixedHealthTime() {
+		return fixedHealthTime;
+	}
+
+	public void setFixedHealthTime(Date fixedHealthTime) {
+		this.fixedHealthTime = fixedHealthTime;
 	}
 
 	/**
@@ -133,15 +143,11 @@ public class Status {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "Status [tkey=" + tkey + ", healthTime=" + healthTime + ", numConnections="
-				+ numConnections + ", policyStatus=" + policyStatus + ", activityFlag="
-				+ activityFlag + "]";
+		return "Status [tkey=" + tkey + ", healthTime=" + healthTime
+				+ ", numConnections=" + numConnections + ", policyStatus="
+				+ policyStatus + ", activityFlag=" + activityFlag
+				+ ", fixedHealthTime=" + fixedHealthTime + "]";
 	}
 }

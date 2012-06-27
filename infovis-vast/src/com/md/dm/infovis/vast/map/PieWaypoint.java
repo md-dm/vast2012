@@ -46,17 +46,39 @@ public class PieWaypoint extends Waypoint {
 					new Slice((Double) dbObject.get("policyStatus5"),
 							new Color(215, 25, 28, 100)) });
 		}
+		if (pieType.startsWith("ActivityFlag")) {
+			return Arrays.asList(new Slice[] {
+					new Slice((Double) dbObject.get("activityFlag1"),
+							new Color(27, 158, 119, 100)),
+					new Slice((Double) dbObject.get("activityFlag2"),
+							new Color(217, 95, 2, 100)),
+					new Slice((Double) dbObject.get("activityFlag3"),
+							new Color(117, 112, 179, 100)),
+					new Slice((Double) dbObject.get("activityFlag4"),
+							new Color(231, 41, 138, 100)),
+					new Slice((Double) dbObject.get("activityFlag5"),
+							new Color(102, 166, 30, 100)) });
+		}
+		if (pieType.startsWith("MachineClass")) {
+			return Arrays.asList(new Slice[] {
+					new Slice((Double) dbObject.get("atm"), new Color(27, 158,
+							119, 100)),
+					new Slice((Double) dbObject.get("server"), new Color(217,
+							95, 2, 100)),
+					new Slice((Double) dbObject.get("workstation"), new Color(
+							117, 112, 179, 100)) });
+		}
 		return Arrays.asList(new Slice[] {
-				new Slice((Double) dbObject.get("activityFlag1"),
-						new Color(27, 158, 119, 100)),
-				new Slice((Double) dbObject.get("activityFlag2"),
-						new Color(217, 95, 2, 100)),
-				new Slice((Double) dbObject.get("activityFlag3"),
-						new Color(117, 112, 179, 100)),
-				new Slice((Double) dbObject.get("activityFlag4"),
-						new Color(231, 41, 138, 100)),
-				new Slice((Double) dbObject.get("activityFlag5"),
-						new Color(102, 166, 30, 100)) });	
+				new Slice((Double) dbObject.get("empty"), new Color(166, 206, 227, 100)),
+				new Slice((Double) dbObject.get("compute"), new Color(31, 120, 180, 100)),
+				new Slice((Double) dbObject.get("email"), new Color(178, 223, 138, 100)),
+				new Slice((Double) dbObject.get("fileserver"), new Color(51, 160, 44, 100)),
+				new Slice((Double) dbObject.get("loan"), new Color(251, 154, 153, 100)),
+				new Slice((Double) dbObject.get("fileserver"), new Color(227, 26, 28, 100)),
+				new Slice((Double) dbObject.get("multiple"), new Color(253, 191, 111, 100)),
+				new Slice((Double) dbObject.get("office"), new Color(253, 191, 111, 100)),
+				new Slice((Double) dbObject.get("teller"), new Color(255, 127, 0, 100)),
+				new Slice((Double) dbObject.get("web"), new Color(202, 178, 214, 100)) });
 	}
 
 	public String getLabel() {

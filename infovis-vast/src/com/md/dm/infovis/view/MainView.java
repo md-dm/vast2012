@@ -221,21 +221,80 @@ public class MainView extends JPanel {
 
 		JPanel machineClassPanel = new JPanel();
 		machineClassPanel.setBorder(new TitledBorder("Machine Class"));
-		machineClassPanel.setLayout(new GridLayout(3, 0));
+		machineClassPanel.setLayout(new BorderLayout());
+		centerPanel = new JPanel(new GridLayout(3, 0));
+		
+		eastPanel = new JPanel(new GridLayout(3, 0));
+		label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(27, 158, 119, 100));
+		eastPanel.add(label);
+		label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(217, 95, 2, 100));
+		eastPanel.add(label);
+		label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(117, 112, 179, 100));
+		eastPanel.add(label);
+
 		machineClassList = new ArrayList<Checkbox>();
 		machineClassList.add(new Checkbox("workstation"));
 		machineClassList.add(new Checkbox("server"));
 		machineClassList.add(new Checkbox("atm"));
 
+
 		for (Checkbox checkbox : machineClassList) {
-			machineClassPanel.add(checkbox);
+			centerPanel.add(checkbox);
 		}
 
+		machineClassPanel.add(eastPanel, BorderLayout.EAST);
+		machineClassPanel.add(centerPanel, BorderLayout.CENTER);
 		filterPanel.add(machineClassPanel);
 
 		JPanel machineFunctionPanel = new JPanel();
 		machineFunctionPanel.setBorder(new TitledBorder("Machine Class"));
-		machineFunctionPanel.setLayout(new GridLayout(9, 0));
+		machineFunctionPanel.setLayout(new BorderLayout());
+		centerPanel = new JPanel(new GridLayout(9, 0));
+		
+		eastPanel = new JPanel(new GridLayout(9, 0));
+		label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(166, 206, 227, 100));
+		eastPanel.add(label);
+		label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(31, 120, 180, 100));
+		eastPanel.add(label);
+		label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(178, 223, 138, 100));
+		eastPanel.add(label);
+		label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(51, 160, 44, 100));
+		eastPanel.add(label);
+		label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(251, 154, 153, 100));
+		eastPanel.add(label);
+		label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(227, 26, 28, 100));
+		eastPanel.add(label);
+		label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(253, 191, 111, 100));
+		eastPanel.add(label);
+		label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(255, 127, 0, 100));
+		eastPanel.add(label);
+		label = new JLabel("  ");
+		label.setOpaque(true);
+		label.setBackground(new Color(202, 178, 214, 100));
+		eastPanel.add(label);
+
 		machineFunctionList = new ArrayList<Checkbox>();
 		machineFunctionList.add(new Checkbox(""));
 		machineFunctionList.add(new Checkbox("web"));
@@ -248,9 +307,11 @@ public class MainView extends JPanel {
 		machineFunctionList.add(new Checkbox("file server"));
 
 		for (Checkbox checkbox : machineFunctionList) {
-			machineFunctionPanel.add(checkbox);
+			centerPanel.add(checkbox);
 		}
 
+		machineFunctionPanel.add(eastPanel, BorderLayout.EAST);
+		machineFunctionPanel.add(centerPanel, BorderLayout.CENTER);
 		filterPanel.add(machineFunctionPanel);
 
 		
@@ -266,7 +327,7 @@ public class MainView extends JPanel {
 		JPanel chartPanel = new JPanel();
 		chartPanel.setBorder(new TitledBorder("Chart"));
 		chartPanel.setLayout(new GridLayout(1, 1));
-		String[] types = { "PolicyStatus-Pie", "ActivityFlag-Pie" };
+		String[] types = { "PolicyStatus-Pie", "ActivityFlag-Pie", "MachineClass-Pie", "MachineFunction-Pie" };
 		chartComboBox = new JComboBox(types);
 		chartPanel.add(chartComboBox);
 
