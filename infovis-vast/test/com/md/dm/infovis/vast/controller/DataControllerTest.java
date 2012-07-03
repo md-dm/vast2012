@@ -1,9 +1,12 @@
 package com.md.dm.infovis.vast.controller;
 
-import static org.junit.Assert.*;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import junit.framework.Assert;
 
@@ -18,9 +21,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
-import com.mongodb.MongoURI;
 import com.mongodb.QueryBuilder;
-import com.mongodb.WriteConcern;
 
 public class DataControllerTest {
 
@@ -133,24 +134,23 @@ public class DataControllerTest {
 		key.append("location", true);
 
 		DB db = dataController.getDB("vast");
-		
-		if(db.collectionExists("region")){
+
+		if (db.collectionExists("region")) {
 			DBCollection collection = db.getCollection("region");
 			collection.drop();
 		}
-		
-		
+
 		QueryBuilder qb = new QueryBuilder();
-		//qb.put("statusList").notEquals(new ArrayList());
+		// qb.put("statusList").notEquals(new ArrayList());
 		DBObject group = dataController.group(key, qb.get());
 
 		DBCollection region = db.createCollection("region", null);
-		
+
 		BasicDBList basicDBList = (BasicDBList) group;
 		for (Object object : basicDBList) {
-			region.insert((DBObject)object);
+			region.insert((DBObject) object);
 		}
-		
+
 		region.ensureIndex(new BasicDBObject("bussinesUnit", 1).append("facility", 1));
 		region.ensureIndex(new BasicDBObject("bussinesUnit", 1));
 		region.ensureIndex(new BasicDBObject("facility", 1));
@@ -165,21 +165,22 @@ public class DataControllerTest {
 		region.ensureIndex(new BasicDBObject("activityFlag3", 1));
 		region.ensureIndex(new BasicDBObject("activityFlag4", 1));
 		region.ensureIndex(new BasicDBObject("activityFlag5", 1));
-		
+
 		System.out.println(region.count());
 
 	}
-	
+
 	@Test
 	public void testFilterRegions() throws Exception {
-		DataController machineDataController = new DataController(new Mongo("localhost:27022"), "vast", "region");
+		DataController machineDataController = new DataController(new Mongo("localhost:27022"),
+				"vast", "region");
 		DBCursor cursor = machineDataController.find(QueryBuilder.start().get());
-		
+
 		for (DBObject dbObject : cursor) {
 			System.out.println(dbObject);
 		}
 	}
-	
+
 	@Test
 	public void testConnectRemote() throws Exception {
 		BasicDBObject key = new BasicDBObject();
@@ -188,24 +189,23 @@ public class DataControllerTest {
 		key.append("location", true);
 
 		DB db = dataController.getDB("vast");
-		
-		if(db.collectionExists("region")){
+
+		if (db.collectionExists("region")) {
 			DBCollection collection = db.getCollection("region");
 			collection.drop();
 		}
-		
-		
+
 		QueryBuilder qb = new QueryBuilder();
-		//qb.put("statusList").notEquals(new ArrayList());
+		// qb.put("statusList").notEquals(new ArrayList());
 		DBObject group = dataController.group(key, qb.get());
 
 		DBCollection region = db.createCollection("region", null);
-		
+
 		BasicDBList basicDBList = (BasicDBList) group;
 		for (Object object : basicDBList) {
-			region.insert((DBObject)object);
+			region.insert((DBObject) object);
 		}
-		
+
 		region.ensureIndex(new BasicDBObject("bussinesUnit", 1).append("facility", 1));
 		region.ensureIndex(new BasicDBObject("bussinesUnit", 1));
 		region.ensureIndex(new BasicDBObject("facility", 1));
@@ -220,9 +220,56 @@ public class DataControllerTest {
 		region.ensureIndex(new BasicDBObject("activityFlag3", 1));
 		region.ensureIndex(new BasicDBObject("activityFlag4", 1));
 		region.ensureIndex(new BasicDBObject("activityFlag5", 1));
-		
+
 		System.out.println(region.count());
+
+	}
+
+	@Test
+	public void testFindByHealthTime() throws Exception {
 		
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		//formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+		Date healthTime = formatter.parse("2012-02-03 14:30:00");
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(healthTime);
+		System.out.println(calendar);
+
+		dataController = new DataController(new Mongo("localhost", 27021), "vast", "machine");
+
+		QueryBuilder qb = new QueryBuilder();
+
+		qb.put("statusList.healthTime").is(new GregorianCalendar(2012, 1, 3, 11, 30, 0).getTime());
+
+		DBCursor cursor = dataController.find(qb.get());
+		System.out.println(qb.get() + "." + cursor.count());
+
+	}
+
+	public Calendar convertToGmt(Calendar cal) {
+
+		Date date = cal.getTime();
+		TimeZone tz = cal.getTimeZone();
+
+		System.out.println("input calendar has date [" + date + "]");
+
+		// Returns the number of milliseconds since January 1, 1970, 00:00:00
+		// GMT
+		long msFromEpochGmt = date.getTime();
+
+		// gives you the current offset in ms from GMT at the current date
+		int offsetFromUTC = tz.getOffset(msFromEpochGmt);
+		System.out.println("offset is " + offsetFromUTC);
+
+		// create a new calendar in GMT timezone, set to this date and add the
+		// offset
+		Calendar gmtCal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		gmtCal.setTime(date);
+		gmtCal.add(Calendar.MILLISECOND, offsetFromUTC);
+
+		System.out.println("Created GMT cal with date [" + gmtCal.getTime() + "]");
+
+		return gmtCal;
 	}
 
 }
