@@ -16,14 +16,10 @@ public class Machine {
 	private ObjectId id;
 
 	private String ipAddr;
-	private int firstOctect;
-	private int secondOctect;
-	private int thirdOctect;
-	private int fourthOctect;
 	private String machineClass;
 	private String machineFunction;
-	private String bussinesUnit;
-	private String facility;
+	private int bussinesUnit;
+	private int facility;
 
 	private double[] location;
 
@@ -41,36 +37,52 @@ public class Machine {
 		}
 
 		String ip = data[0].trim();
-		String[] octects = ip.split("\\.");
 
-		return new Machine(ip, Integer.parseInt(octects[0]), Integer.parseInt(octects[1]),
-				Integer.parseInt(octects[2]), Integer.parseInt(octects[3]), data[1], data[2],
-				data[3], data[4], Double.parseDouble(data[5]), Double.parseDouble(data[6]));
+		return new Machine(ip, data[1], data[2], data[3], data[4], Double.parseDouble(data[5]),
+				Double.parseDouble(data[6]));
+	}
+
+	public Machine(String ipAddr, String machineClass, String machineFunction, String bussinesUnit,
+			String facility, double[] location) {
+		super();
+
+		this.ipAddr = ipAddr;
+		this.machineClass = machineClass;
+		this.machineFunction = machineFunction;
+
+		if (bussinesUnit.equals("headquarters")) {
+			this.bussinesUnit = 0;
+		} else {
+			this.bussinesUnit = Integer.valueOf(bussinesUnit.split("-")[1]);
+		}
+
+		if (facility.equals("headquarters")) {
+			this.facility = 600;
+		} else if (facility.contains("datacenter")) {
+			this.facility = 500 + Integer.valueOf(facility.split("-")[1]);
+		} else if (facility.equals("branch")) {
+			this.facility = Integer.valueOf(facility.split("-")[1]);
+			;
+		}
+		this.location = location;
+		this.statusList = new ArrayList<Status>();
+	}
+
+	public Machine(String ipAddr, String machineClass, String machineFunction, String bussinesUnit,
+			String facility, double x, double y) {
+		this(ipAddr, machineClass, machineFunction, bussinesUnit, facility, new double[] { x, y });
 	}
 
 	@PersistenceConstructor
-	Machine(String ipAddr, int firstOctect, int secondOctect, int thirdOctect, int fourthOctect,
-			String machineClass, String machineFunction, String bussinesUnit, String facility,
-			double[] location) {
+	Machine(String ipAddr, String machineClass, String machineFunction, int bussinesUnit,
+			int facility, double[] location) {
 		super();
 		this.ipAddr = ipAddr;
-		this.firstOctect = firstOctect;
-		this.secondOctect = secondOctect;
-		this.thirdOctect = thirdOctect;
-		this.fourthOctect = fourthOctect;
 		this.machineClass = machineClass;
 		this.machineFunction = machineFunction;
 		this.bussinesUnit = bussinesUnit;
 		this.facility = facility;
 		this.location = location;
-		this.statusList = new ArrayList<Status>();
-	}
-
-	public Machine(String ipAddr, int firstOctect, int secondOctect, int thirdOctect,
-			int fourthOctect, String machineClass, String machineFunction, String bussinesUnit,
-			String facility, double x, double y) {
-		this(ipAddr, firstOctect, secondOctect, thirdOctect, fourthOctect, machineClass,
-				machineFunction, bussinesUnit, facility, new double[] { x, y });
 	}
 
 	/**
@@ -86,66 +98,6 @@ public class Machine {
 	 */
 	public void setIpAddr(String ipAddr) {
 		this.ipAddr = ipAddr;
-	}
-
-	/**
-	 * @return the firstOctect
-	 */
-	public int getFirstOctect() {
-		return firstOctect;
-	}
-
-	/**
-	 * @param firstOctect
-	 *            the firstOctect to set
-	 */
-	public void setFirstOctect(int firstOctect) {
-		this.firstOctect = firstOctect;
-	}
-
-	/**
-	 * @return the secondOctect
-	 */
-	public int getSecondOctect() {
-		return secondOctect;
-	}
-
-	/**
-	 * @param secondOctect
-	 *            the secondOctect to set
-	 */
-	public void setSecondOctect(int secondOctect) {
-		this.secondOctect = secondOctect;
-	}
-
-	/**
-	 * @return the thirdOctect
-	 */
-	public int getThirdOctect() {
-		return thirdOctect;
-	}
-
-	/**
-	 * @param thirdOctect
-	 *            the thirdOctect to set
-	 */
-	public void setThirdOctect(int thirdOctect) {
-		this.thirdOctect = thirdOctect;
-	}
-
-	/**
-	 * @return the fourthOctect
-	 */
-	public int getFourthOctect() {
-		return fourthOctect;
-	}
-
-	/**
-	 * @param fourthOctect
-	 *            the fourthOctect to set
-	 */
-	public void setFourthOctect(int fourthOctect) {
-		this.fourthOctect = fourthOctect;
 	}
 
 	/**
@@ -181,31 +133,15 @@ public class Machine {
 	/**
 	 * @return the bussinesUnit
 	 */
-	public String getBussinesUnit() {
+	public int getBussinesUnit() {
 		return bussinesUnit;
-	}
-
-	/**
-	 * @param bussinesUnit
-	 *            the bussinesUnit to set
-	 */
-	public void setBussinesUnit(String bussinesUnit) {
-		this.bussinesUnit = bussinesUnit;
 	}
 
 	/**
 	 * @return the facility
 	 */
-	public String getFacility() {
+	public int getFacility() {
 		return facility;
-	}
-
-	/**
-	 * @param facility
-	 *            the facility to set
-	 */
-	public void setFacility(String facility) {
-		this.facility = facility;
 	}
 
 	/**
@@ -248,6 +184,19 @@ public class Machine {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Machine [id=" + id + ", ipAddr=" + ipAddr + ", machineClass=" + machineClass
+				+ ", machineFunction=" + machineFunction + ", bussinesUnit=" + bussinesUnit
+				+ ", facility=" + facility + ", location=" + Arrays.toString(location)
+				+ ", statusList=" + statusList + "]";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -278,20 +227,5 @@ public class Machine {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Machine [id=" + id + ", ipAddr=" + ipAddr + ", firstOctect=" + firstOctect
-				+ ", secondOctect=" + secondOctect + ", thirdOctect=" + thirdOctect
-				+ ", fourthOctect=" + fourthOctect + ", machineClass=" + machineClass
-				+ ", machineFunction=" + machineFunction + ", bussinesUnit=" + bussinesUnit
-				+ ", facility=" + facility + ", location=" + Arrays.toString(location)
-				+ ", statusList=" + statusList + "]";
 	}
 }

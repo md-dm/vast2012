@@ -6,10 +6,15 @@ package com.md.dm.vi.vast;
 import java.io.FileInputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -40,6 +45,8 @@ public class VastApp {
 	@Inject
 	private MongoOperations mongoOperations;
 
+	private Map<String, Machine> machinesMap = new HashMap<String, Machine>();
+
 	public static void main(String[] args) throws Exception {
 
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
@@ -47,36 +54,12 @@ public class VastApp {
 
 		VastApp vastApp = context.getBean(VastApp.class);
 
-//		vastApp.createDatabase();
-//		vastApp.populateMeta();
-//		vastApp.populateMetaStatus();
+		// vastApp.createDatabase();
+		// vastApp.populateMeta();
+		// vastApp.populateMetaStatus();
 		vastApp.populateMachines();
 		vastApp.populateMachineStatus();
-
-		// MongoOperations mongoOps = new MongoTemplate(new Mongo(), "vast");
-		//
-		// mongoOps.indexOps(Meta.class).ensureIndex(
-		// new Index().on("ipAddr", Order.ASCENDING));
-		// mongoOps.indexOps(Meta.class).ensureIndex(
-		// new GeospatialIndex("location"));
-		//
-		// mongoOps.insert(Meta
-		// .build("172.8.238.33,server,file server,region-1,branch3,40.031174,-141.19032"));
-		//
-		// log.info(mongoOps.findOne(
-		// new Query(Criteria.where("ipAddr").is("172.8.238.33")),
-		// Meta.class));
-		//
-		// // lower-left then upper-right
-		// Box box = new Box(new Point(-73.99756, 40.73083), new
-		// Point(-73.988135,
-		// 40.741404));
-		//
-		// List<Meta> metas = mongoOps.find(new Query(Criteria.where("location")
-		// .within(box)), Meta.class);
-		//
-		// // mongoOps.dropCollection("meta");
-
+		//vastApp.bost();
 	}
 
 	private void createDatabase() {
@@ -166,13 +149,13 @@ public class VastApp {
 
 	private void populateMachines() throws Exception {
 
-		if (mongoOperations.collectionExists(Machine.class)) {
-			mongoOperations.dropCollection(Machine.class);
-			mongoOperations.createCollection(Machine.class);
-		}
-
-		mongoOperations.indexOps(Machine.class).ensureIndex(
-				new Index().on("ipAddr", Order.ASCENDING));
+		// if (mongoOperations.collectionExists(Machine.class)) {
+		// mongoOperations.dropCollection(Machine.class);
+		// mongoOperations.createCollection(Machine.class);
+		// }
+		//
+		// mongoOperations.indexOps(Machine.class).ensureIndex(
+		// new Index().on("ipAddr", Order.ASCENDING));
 		mongoOperations.indexOps(Machine.class).ensureIndex(
 				new Index().on("machineClass", Order.ASCENDING));
 		mongoOperations.indexOps(Machine.class).ensureIndex(
@@ -181,42 +164,41 @@ public class VastApp {
 				new Index().on("bussinesUnit", Order.ASCENDING));
 		mongoOperations.indexOps(Machine.class).ensureIndex(
 				new Index().on("facility", Order.ASCENDING));
+		mongoOperations.indexOps(Machine.class).ensureIndex(
+				new Index().on("statusList.healthTime", Order.ASCENDING));
+		mongoOperations.indexOps(Machine.class).ensureIndex(
+				new Index().on("statusList.fixedHealthTime", Order.ASCENDING));
+		mongoOperations.indexOps(Machine.class).ensureIndex(
+				new Index().on("statusList.policyStatus", Order.ASCENDING));
+		mongoOperations.indexOps(Machine.class).ensureIndex(
+				new Index().on("statusList.activityFlag", Order.ASCENDING));
 		mongoOperations.indexOps(Machine.class).ensureIndex(new GeospatialIndex("location"));
-
-//		Machine machine = Machine
-//				.build("172.1.1.47,workstation,office,headquarters,headquarters,0.8173708,-70.259796");
-//		System.out.println(machine);
-//		mongoOperations.save(machine);
-//		machine = Machine
-//				.build("172.1.1.49,workstation,office,headquarters,headquarters,0.8173708,-70.259796");
-//		System.out.println(machine);
-//		mongoOperations.save(machine);
-//
-//		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//
-//		mongoOperations.findAndModify(new Query(Criteria.where("ipAddr").is("172.1.1.47")),
-//				new Update().push(
-//						"statusList",
-//						new Status(Long.parseLong("2448776"), formatter
-//								.parse("2012-02-02 14:00:00"), Integer.parseInt("83"), Integer
-//								.parseInt("1"), Integer.parseInt("1"))), Machine.class);
-//		
-//		mongoOperations.findAndModify(new Query(Criteria.where("ipAddr").is("172.1.1.49")),
-//				new Update().push(
-//						"statusList",
-//						new Status(Long.parseLong("2448777"), formatter
-//								.parse("2012-02-02 14:00:00"), Integer.parseInt("83"), Integer
-//								.parseInt("3"), Integer.parseInt("2"))), Machine.class);
 
 		Scanner scanner = new Scanner(new FileInputStream(
 				"/Users/diego/Documents/Maestria/VI/vast2012/metaDB-csv-3-7/meta-3-7.csv"), "UTF-8");
 		try {
+			List<Machine> machines = new ArrayList<Machine>();
+
 			System.out.println(scanner.nextLine());
 			while (scanner.hasNextLine()) {
 				Machine machine = Machine.build(scanner.nextLine());
-				System.out.println(machine);
-				mongoOperations.save(machine);
+
+				machines.add(machine);
+				machinesMap.put(machine.getIpAddr(), machine);
+
+				if (machines.size() == 100000) {
+					System.out.println("Insert!");
+					Collections.shuffle(machines);
+					mongoOperations.insert(machines, Machine.class);
+					machines = new ArrayList<Machine>();
+				}
 			}
+
+			if (!machines.isEmpty()) {
+				Collections.shuffle(machines);
+				mongoOperations.insert(machines, Machine.class);
+			}
+
 		} finally {
 			scanner.close();
 		}
@@ -229,7 +211,7 @@ public class VastApp {
 		StringBuilder text = new StringBuilder();
 		String NL = System.getProperty("line.separator");
 		Scanner scanner = new Scanner(new FileInputStream(
-				"/Users/diego/Documents/Maestria/VI/vast2012/metaDB-csv-3-7/windowOneSingle.csv"),
+				"/Users/diego/Documents/Maestria/VI/vast2012/metaDB-csv-3-7/metaStatus-3-7.csv"),
 				"UTF-8");
 
 		try {
@@ -243,26 +225,64 @@ public class VastApp {
 					throw new RuntimeException("Invalid parameters");
 				}
 				// find
-				Query query = new Query(Criteria.where("ipAddr").is(data[1].trim()));
-				List<Machine> find = mongoOperations.find(query, Machine.class);
-				Double longitude = find.get(0).getLocation()[1];
-				int offset = (int) (Math.floor(Math.floor(Math.abs(Math.round(longitude * 1000000.))/1000000) / 15) * -1);
-				Date healthTime = formatter.parse(data[2].trim());
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(healthTime);
-				calendar.add(Calendar.HOUR, offset);
-				Date fixedDate = calendar.getTime();
-				Status status = new Status(Long.parseLong(data[0]),
-						healthTime, Integer.parseInt(data[3]),
-						Integer.parseInt(data[4]), Integer.parseInt(data[5]), fixedDate);
-				System.out.println(status);
-				mongoOperations.findAndModify(query, new Update().push("statusList", status),
-						Machine.class);
+//				if (Integer.parseInt(data[4].trim()) == 4 || Integer.parseInt(data[4].trim()) == 5) {
+					Query query = new Query(Criteria.where("ipAddr").is(data[1].trim()));
+
+					Machine machine = machinesMap.get(data[1]);
+
+					Double longitude = machine.getLocation()[1];
+
+					int offset = (int) (Math.floor(Math.floor(Math.abs(Math
+							.round(longitude * 1000000.)) / 1000000) / 15) * -1);
+					Date healthTime = formatter.parse(data[2].trim());
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(healthTime);
+					calendar.add(Calendar.HOUR, offset);
+					Date fixedDate = calendar.getTime();
+					Status status = new Status(Long.parseLong(data[0]), healthTime,
+							Integer.parseInt(data[3]), Integer.parseInt(data[4]),
+							Integer.parseInt(data[5]), fixedDate);
+
+					System.out.println(status);
+
+					mongoOperations.findAndModify(query, new Update().push("statusList", status),
+							Machine.class);
+//				}
+
 			}
 
 		} finally {
 			scanner.close();
 		}
+
+	}
+
+	private void bost() throws Exception{
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		Query query = new Query(Criteria.where("ipAddr").is("172.1.3.83"));
+
+		Machine machine = mongoOperations.findOne(query, Machine.class);
+
+		String line = "259723,172.1.3.83,2012-02-03 14:30:00,36,1,1";
+		String[] data = line.split(",");
+
+		Double longitude = machine.getLocation()[1];
+		
+		int offset = (int) (Math
+				.floor(Math.floor(Math.abs(Math.round(longitude * 1000000.)) / 1000000) / 15) * -1);
+		Date healthTime = formatter.parse(data[2].trim());
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(healthTime);
+		calendar.add(Calendar.HOUR, offset);
+		Date fixedDate = calendar.getTime();
+		Status status = new Status(Long.parseLong(data[0]), healthTime, Integer.parseInt(data[3]),
+				Integer.parseInt(data[4]), Integer.parseInt(data[5]), fixedDate);
+
+		System.out.println(status);
+
+		mongoOperations
+				.findAndModify(query, new Update().push("statusList", status), Machine.class);
 
 	}
 }

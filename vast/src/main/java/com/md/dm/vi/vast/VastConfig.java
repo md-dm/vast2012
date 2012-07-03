@@ -25,7 +25,7 @@ public class VastConfig {
 
 	@Bean
 	public Mongo mongo() throws UnknownHostException {
-		return new Mongo("localhost", 27022);
+		return new Mongo("localhost", 27021);
 	}
 
 	@Bean

@@ -523,3 +523,118 @@ db.machine.group({ key: { bussinesUnit:true, facility:true,  machineClass:true }
 db.machine.find({bussinesUnit:'headquarters', facility:'headquarters', statusList: {$ne:[]} }).count();
 
 
+///// 
+
+sudo mkdir -p /db/config/data
+sudo mongod --port 27023 --dbpath /db/config/data --configsvr
+
+sudo mongos --configdb localhost:27023 --port 27021 
+
+sudo mkdir -p /db/shard0/data 
+sudo mongod --port 27024 --dbpath /db/shard0/data --shardsvr
+
+sudo mkdir -p /db/shard1/data
+sudo mongod --port 27025 --dbpath /db/shard1/data --shardsvr
+
+db.runCommand( { addshard : "localhost:27024", allowLocal : true } )
+db.runCommand( { addshard : "localhost:27024", allowLocal : true } )
+
+db.runCommand({listshards:1})
+
+vast = db.getSisterDB("vast")
+db.runCommand({ enablesharding: "vast"})
+db.runCommand({ shardcollection : "vast.machine", key : {ipAddr : 1}})
+
+db.machine.find({'statusList.healthTime':new Date(2012,1,2, 11, 30, 0)})
+
+new Date('2012-02-02 12:30:00')
+ISODate("2012-02-02T12:30:00Z")
+new Date(2012,2,2, 12, 30, 0)
+
+new Date(2012,2,2, 12, 30, 0)
+ISODate("2012-03-02T15:30:00Z")
+
+new Date(2012,1,2, 9, 30, 0)
+ISODate("2012-02-02T15:30:00Z")
+
+
+
+
+2012-02-03T14:30:00Z
+new Date(2012,3,2, 14, 30, 0)
+mongos> new Date(2012,2,2, 14, 30, 0)
+ISODate("2012-04-02T17:30:00Z")
+
+db.machine.find({'statusList.healthTime': {$gte: new Date(2012,1,3, 11, 30, 0), $lt: new Date(2012,1,3, 11, 30, 0)}});
+
+
+2012-02-02T12:30:00Z
+2012-02-04T11:00:00Z
+
+
+var now = new Date(); 
+var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+
+new Date()  
+new Date(milliseconds)  
+new Date(dateString)  
+new Date(year, month, day [, hour, minute, second, millisecond ])  
+
+var start = new Date(2012, 2, 2);
+var end = new Date(2012, 2, 2);
+
+	ISODate("2012-02-02T13:00:00Z"),
+
+db.posts.find({created_on: {$gte: start, $lt: end}});
+
+
+res = db.runCommand( {
+     mapreduce: 'machine',
+     map: function() {
+          emit( { }, { sum: this.v, recs: 1 } );
+     },
+     reduce: function(key, vals) {
+          var ret = { sum: 0, recs: 0 };
+          for ( var i = 0; i &lt; vals.length; i++ ) {
+               ret.sum += vals[i].sum;
+               ret.recs += vals[i].recs;
+          }
+          return ret;
+     },
+     finalize: function (key, val) {
+          val.avg = val.sum / val.recs;
+          return val;
+     },
+     out: 'result1',
+     verbose: true
+} );
+
+
+var map =   function() {
+    emit( this.ipAddr, {count: 1, statusList: this.statusList } );
+}
+
+var reduce = function(key, values) {
+    var result = {count: 0, policy: []};
+
+    values.forEach(function(value) {
+      result.count += value.statusList.length;
+    });
+
+    return result;
+}
+
+var mr = db.runCommand( { mapreduce: 'machine',
+			      		  map: map,
+			      		  reduce: reduce,
+			      		  out: { replace: 'results' }
+});
+			    
+m = function() { emit(this.ipAddr, 1); }
+r = function(k,values) {
+	var count = values; 
+	return {count: count}; 
+}
+res = db.machine.mapReduce(m, r, { out:'results' ,query : {'statusList':{$ne:[]} } });
+
