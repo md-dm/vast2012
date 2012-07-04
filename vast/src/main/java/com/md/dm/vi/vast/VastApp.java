@@ -59,7 +59,7 @@ public class VastApp {
 		// vastApp.populateMetaStatus();
 		vastApp.populateMachines();
 		vastApp.populateMachineStatus();
-		//vastApp.bost();
+		// vastApp.bost();
 	}
 
 	private void createDatabase() {
@@ -225,7 +225,8 @@ public class VastApp {
 					throw new RuntimeException("Invalid parameters");
 				}
 				// find
-//				if (Integer.parseInt(data[4].trim()) == 4 || Integer.parseInt(data[4].trim()) == 5) {
+				if (Integer.parseInt(data[4].trim()) == 3 || Integer.parseInt(data[4].trim()) == 4
+						|| Integer.parseInt(data[4].trim()) == 5) {
 					Query query = new Query(Criteria.where("ipAddr").is(data[1].trim()));
 
 					Machine machine = machinesMap.get(data[1]);
@@ -247,7 +248,7 @@ public class VastApp {
 
 					mongoOperations.findAndModify(query, new Update().push("statusList", status),
 							Machine.class);
-//				}
+				}
 
 			}
 
@@ -257,7 +258,7 @@ public class VastApp {
 
 	}
 
-	private void bost() throws Exception{
+	private void bost() throws Exception {
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		Query query = new Query(Criteria.where("ipAddr").is("172.1.3.83"));
@@ -268,7 +269,7 @@ public class VastApp {
 		String[] data = line.split(",");
 
 		Double longitude = machine.getLocation()[1];
-		
+
 		int offset = (int) (Math
 				.floor(Math.floor(Math.abs(Math.round(longitude * 1000000.)) / 1000000) / 15) * -1);
 		Date healthTime = formatter.parse(data[2].trim());
