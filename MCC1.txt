@@ -1,0 +1,8 @@
+We discovered two areas of concern. One is offline machines and the other is non normal status policy in two large regions 
+
+There are 79761 offline machines at 2 pm BMT (see figure 1.1.1). These means machines without policy status and activity flag information.
+
+We discovered most of those offline machines(62%) belong to datacenter 5 and they are highlighted in the Scatterplot matrix using blue points. (See figure 1.1.2). To the other side the rest of those offline machines are workstations and their local time is less than 7 am. This is a correct behaviour acording to the rules beacuse it is not a bussiness hour. See bar plot.
+
+The second area region 5 and region 10 don't have any machine with policy status 1 (healthy). (See figure 1.1.3) Both are large regions and we are showing their location in the Bank World map. Region 2 has 40621 machines and regions 10 has 41317 machines. Most of them have policy status 2. See the third column in the scatterplot.
+
