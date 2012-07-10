@@ -163,21 +163,14 @@ div.WordSection1 {
 		</h3>
 		<p class="MsoNormal">
 			<span
-				style="font-family: &amp; amp; quot; Calibri &amp;amp; quot; ,&amp; amp; quot; sans-serif &amp;amp; quot;;">
-				<b>Exploratory phase:</b><br />
-				We started working with MongoDB database in a pre-process phase. The idea was to clean the data and show it in a java viewer with maps. For this we choosed a Swing maps viewer.  
-			</span>
-		</p>
-		<p class="MsoNormal">
-			<span
 				style="font-family: &amp; amp; quot; Calibri &amp;amp; quot; ,&amp; amp; quot; sans-serif &amp;amp; quot;;"><b>Postgres</b><br />
-				To manage the evolution of the machines throughout time we used Postgres database 				
+				To manage the evolution of the machines throughout time we used Postgres database. With this tool we created .csv files to analize and visualize. 				
 				</span>
 		</p>
 		<p class="MsoNormal">
 			<span
 				style="font-family: &amp; amp; quot; Calibri &amp;amp; quot; ,&amp; amp; quot; sans-serif &amp;amp; quot;;"><b>JMP:</b><br />
-				When we have been the crud data is small subsets, we used this tool to create graphs	
+				We used this tool to create graphs and process crude data in small subsets. It helped us to handle and interact with the data.
 				</span>
 		</p>
 		<p class="MsoNormal">
@@ -366,7 +359,7 @@ div.WordSection1 {
 
 			<p class=MsoNormal>
 				<span lang=EN-US style='mso-ansi-language:EN-US'>&nbsp;
-					Figure 1.2.1 shows how policy status is growing over the time. Y axis indicates the machine count per status (one color per status value). You can see that machines with status 1 (healthy) are becoming in higher states. This means that network status is getting worst over the time. 
+					Figure 1.2.1 shows how policy status is growing over the time. Y axis indicates the machine count per status (one color per status value). You can see that machines with status 1 (healthy) are becoming to higher states. This means that network status is getting worst over the time. 
 				</span>
 			</p>
 			<p class="MsoNormal">
@@ -388,7 +381,7 @@ div.WordSection1 {
 
 			<p class=MsoNormal>
 				<span lang=EN-US style='mso-ansi-language:EN-US'>&nbsp;
-					Figure 1.2.2 is zoom of the previous figure. We can see in a major detail how policy status 5 starts to be important at midday of February 3. And this status and the others 3 and 4 also grows until the end of report and never go down. This is the most important anomaly that we can visualize.  
+					Figure 1.2.2 is a zoom of the previous figure. We can see in a major detail how policy status 5 starts to be important at midday of February 3. And this status and the others 3 and 4 also grows until the end of report and never go down. This is the most important anomaly that we found.  
 				</span>
 			</p>
 			<p class="MsoNormal">
@@ -412,7 +405,7 @@ div.WordSection1 {
 
 			<p class=MsoNormal>
 				<span lang=EN-US style='mso-ansi-language:EN-US'>&nbsp;
-					Figure 1.2.3 displays the machine counts by the different activity flags over the healthtime. This is a particulary situation, most of the machines report activity flag 1 that means 'Normal'. We are expecting that activity flags are related with policy status but it doesn't happen. In the chart we see two hills that show machines with others activities.  
+					Figure 1.2.3 displays the machine counts by the different activity flags over the healthtime. This is a particulary situation, most of the machines are reporting activity flag 1 that means 'Normal'. We are expecting that activity flags are related with policy status but it doesn't happenning. 
 				</span>
 			</p>
 			<p class="MsoNormal">
@@ -429,6 +422,19 @@ div.WordSection1 {
 				<span lang=EN-US style='font-size:11.0pt;mso-ansi-language:EN-US'>Figure 1.2.4</span>
 			</p>
 
+			<p class="MsoNormal">
+				<span style="font-family: &amp; amp;">&nbsp;</span>
+			</p>
+
+			<p class=MsoNormal>
+				<span lang=EN-US style='mso-ansi-language:EN-US'>&nbsp;
+					Figure 1.2.4 is also a zoom of the previous figure. We can recongnize two hills that are built with the other activities that aren't reporting in all events. We presume that activities over level 3 happen only in business hour. We confirm the supposition in the following figure.  
+				</span>
+			</p>
+			<p class="MsoNormal">
+				<span style="font-family: &amp; amp;">&nbsp;</span>
+			</p>
+
 			<p class=MsoNormal align=center style='text-align:center'><a href="images/machines-by-activityflag-345.png">
 				<span style='color:black;mso-no-proof: yes;text-decoration:none;text-underline:none'>
 					<img border=0 width=1275 height=507 id="_x0000_i1033" src="images/machines-by-activityflag-345.png">
@@ -437,6 +443,20 @@ div.WordSection1 {
 			</p>
 			<p class=MsoNormal align=center style='text-align:center'>
 				<span lang=EN-US style='font-size:11.0pt;mso-ansi-language:EN-US'>Figure 1.2.5</span>
+			</p>
+
+
+			<p class="MsoNormal">
+				<span style="font-family: &amp; amp;">&nbsp;</span>
+			</p>
+
+			<p class=MsoNormal>
+				<span lang=EN-US style='mso-ansi-language:EN-US'>&nbsp;
+					Figure 1.2.5, we detected activity flags 3, 4 and 5 were only reported by machines that their local time is between business hour. And there aren't any activity flag (3,4 and 5) outside this time interval. We can think this as another anomaly. Also we observe that machines count per activity flag value keep constant over local time.  
+				</span>
+			</p>
+			<p class="MsoNormal">
+				<span style="font-family: &amp; amp;">&nbsp;</span>
 			</p>
 
 			<p class=MsoNormal align=center style='text-align:center'><a href="images/offline-machines-vs-offline-workstations.png">
@@ -449,6 +469,19 @@ div.WordSection1 {
 				<span lang=EN-US style='font-size:11.0pt;mso-ansi-language:EN-US'>Figure 1.2.6</span>
 			</p>
 
+			<p class="MsoNormal">
+				<span style="font-family: &amp; amp;">&nbsp;</span>
+			</p>
+
+			<p class=MsoNormal>
+				<span lang=EN-US style='mso-ansi-language:EN-US'>&nbsp;
+					Figure 1.2.6. We calculated how many workstations should be offline in each health time report. We used the local time to decide if the machine should report or not. Also we calculate the difference between the total of machines and the machines that reported in each health time report. Then we visualize both values to compare between them. So we expected that this values were similar but they didn't. These is an anomaly. The number of workstation that should be offline is never reached by the absent count. We can think there are a lot off machines that are never turning off.
+				</span>
+			</p>
+			<p class="MsoNormal">
+				<span style="font-family: &amp; amp;">&nbsp;</span>
+			</p>			
+
 			<p class=MsoNormal align=center style='text-align:center'><a href="images/machines-by-datacenter-5.png">
 				<span style='color:black;mso-no-proof: yes;text-decoration:none;text-underline:none'>
 					<img border=0 width=1275 height=507 id="_x0000_i1033" src="images/machines-by-datacenter-5.png">
@@ -459,6 +492,43 @@ div.WordSection1 {
 				<span lang=EN-US style='font-size:11.0pt;mso-ansi-language:EN-US'>Figure 1.2.7</span>
 			</p>
 
+			<p class="MsoNormal">
+				<span style="font-family: &amp; amp;">&nbsp;</span>
+			</p>
+
+			<p class=MsoNormal>
+				<span lang=EN-US style='mso-ansi-language:EN-US'>&nbsp;
+					Figure 1.2.7 shows another anomaly. Datacenter 5 started without reporting status, it means that at the  beginning datacenter 5 could be considered in a offline situation. It was considered in MC 1.1. But here we adding evolution throught the time. Since February 2 at 7.30 pm the situation get normal as the others 4 datacenters, all their machines report its status.     
+				</span>
+			</p>
+			<p class="MsoNormal">
+				<span style="font-family: &amp; amp;">&nbsp;</span>
+			</p>
+
+			<p class=MsoNormal align=center style='text-align:center'><a href="images/machine-by-datacenters.png">
+				<span style='color:black;mso-no-proof: yes;text-decoration:none;text-underline:none'>
+					<img border=0 width=1275 height=507 id="_x0000_i1033" src="images/machine-by-datacenters.png">
+				</span>
+			</a>
+			</p>
+			<p class=MsoNormal align=center style='text-align:center'>
+				<span lang=EN-US style='font-size:11.0pt;mso-ansi-language:EN-US'>Figure 1.2.8</span>
+			</p>
+
+			<p class="MsoNormal">
+				<span style="font-family: &amp; amp;">&nbsp;</span>
+			</p>
+
+			<p class=MsoNormal>
+				<span lang=EN-US style='mso-ansi-language:EN-US'>&nbsp;
+					Figure 1.2.8 explains how the virus infection is similar between datacenters. We mentioned in figure 1.2.7 that datacenter 5 started in a offline situation and it doesn't affect the policy status 5 increase.  
+				</span>
+			</p>
+			<p class="MsoNormal">
+				<span style="font-family: &amp; amp;">&nbsp;</span>
+			</p>
+
+
 			<p class=MsoNormal align=center style='text-align:center'><a href="images/machines-ps-5-by-headquarters.png">
 				<span style='color:black;mso-no-proof: yes;text-decoration:none;text-underline:none'>
 					<img border=0 width=1275 height=507 id="_x0000_i1033" src="images/machines-ps-5-by-headquarters.png">
@@ -466,7 +536,20 @@ div.WordSection1 {
 			</a>
 			</p>
 			<p class=MsoNormal align=center style='text-align:center'>
-				<span lang=EN-US style='font-size:11.0pt;mso-ansi-language:EN-US'>Figure 1.2.8</span>
+				<span lang=EN-US style='font-size:11.0pt;mso-ansi-language:EN-US'>Figure 1.2.9</span>
+			</p>
+
+			<p class="MsoNormal">
+				<span style="font-family: &amp; amp;">&nbsp;</span>
+			</p>
+
+			<p class=MsoNormal>
+				<span lang=EN-US style='mso-ansi-language:EN-US'>&nbsp;
+					Figure 1.2.9. It helps to explain the previous figure. In more details it shows when the virus infection (policy status) appears the first time for each datacenter. February 2 at 12:45 pm appears the first machine with policy status 5 and it belongs to datacenter 2. Then the second one appears at 17:15 pm in the datacenter 1. After that the network virus infection is starting to grow up until the end February 4 at 8 am when it gets the maximun policy status 5 count. 
+				</span>
+			</p>
+			<p class="MsoNormal">
+				<span style="font-family: &amp; amp;">&nbsp;</span>
 			</p>
 
 
